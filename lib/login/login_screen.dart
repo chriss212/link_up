@@ -9,7 +9,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () => context.go('/welcome'), icon: const Icon(Icons.arrow_back)),
+        leading: IconButton(
+          onPressed: () => context.go('/welcome'),
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -21,7 +24,6 @@ class LoginScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Welcome text centered
                   Column(
                     children: const [
                       SizedBox(height: 32),
@@ -55,32 +57,33 @@ class LoginScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       suffixIcon: IconButton(
-                        onPressed: () => (() => {},),
-                        icon: Icon(Icons.visibility),
+                        onPressed: () {},
+                        icon: const Icon(Icons.visibility),
                       ),
                     ),
                     obscureText: true,
                   ),
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => context.go('/forgot'), 
-                      child: const Text('Forgot password?')
+                      onPressed: () => context.go('/forgot'),
+                      child: const Text('Forgot password?'),
                     ),
                   ),
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 8),
                   SizedBox(
                     height: 48,
                     child: PrimaryButton(
-                      label:  'Log In',
-                      onPressed: () => context.go('/home'),
+                      label: 'Log In',
+                      onPressed: () => context.go('/feed'), 
                     ),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 48,
                     child: OutlinedButton.icon(
+                      icon: const Icon(Icons.login),
                       label: const Text('Continue with Google'),
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
