@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:link_up/shared/widgets/primary_button.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => context.go('/welcome'),
-          icon: const Icon(Icons.arrow_back),
-        ),
+        leading: IconButton(onPressed: () => context.go('/welcome'), icon: const Icon(Icons.arrow_back)),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -21,14 +17,14 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Form(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Column(
                     children: const [
-                      SizedBox(height: 32),
+                      SizedBox(height: 40),
                       Text(
-                        'Welcome back!',
+                        'Create your account',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -37,7 +33,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Log in to your next adventure',
+                        'Join us and start your next adventure',
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey,
@@ -49,7 +45,13 @@ class LoginScreen extends StatelessWidget {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'Email or username',
+                      labelText: 'Email',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -57,33 +59,42 @@ class LoginScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       suffixIcon: IconButton(
-                        onPressed: () {},
+                        onPressed: () => (() => {},),
                         icon: const Icon(Icons.visibility),
                       ),
                     ),
                     obscureText: true,
                   ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => context.go('/forgot'),
-                      child: const Text('Forgot password?'),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 24),
                   SizedBox(
                     height: 48,
-                    child: PrimaryButton(
-                      label: 'Log In',
-                      onPressed: () => context.go('/feed'), 
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFEB7A36),
+                        foregroundColor: Colors.white,
+                        shape: const StadiumBorder(),
+                        minimumSize: const Size.fromHeight(48),
+                      ),
+                      child: const Text('Register'),
                     ),
                   ),
                   const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(child: Divider(color: Colors.grey[400])),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('or'),
+                      ),
+                      Expanded(child: Divider(color: Colors.grey[400])),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
                   SizedBox(
                     height: 48,
                     child: OutlinedButton.icon(
-                      icon: const Icon(Icons.login),
                       label: const Text('Continue with Google'),
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
@@ -91,19 +102,8 @@ class LoginScreen extends StatelessWidget {
                         minimumSize: const Size.fromHeight(48),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account? "),
-                      TextButton(
-                        onPressed: () => context.go('/register'),
-                        child: const Text('Sign up'),
-                      ),
-                    ],
-                  ),
-                ],
+                  ),                
+                  ],
               ),
             ),
           ),
