@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../config/theme/app_colors.dart'; 
+import '../config/theme/app_colors.dart';
 
 class EventFeedScreen extends StatefulWidget {
+  static const name = 'feed';
   const EventFeedScreen({super.key});
 
   @override
@@ -9,15 +10,13 @@ class EventFeedScreen extends StatefulWidget {
 }
 
 class _EventFeedScreenState extends State<EventFeedScreen> {
-  int _tabIndex = 0;
-
-  // Mock data con fechas quemadas
+  // EVENTOS CARDS (datos quemados)
   final List<_EventItem> _events = [
     _EventItem(
       title: 'ROATAN 2026',
       dateLabel: 'Saturday, July 20',
       relativeLabel: 'In 3 days',
-      imageUrl: 'assets/images/roatan1jpeg',
+      imageUrl: 'assets/images/roatan1.jpeg',
     ),
     _EventItem(
       title: 'fiesta Camila',
@@ -36,10 +35,10 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lemon, // fondo de pantalla
+      backgroundColor: AppColors.surface,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: AppColors.lemon,
+        backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textDark,
         centerTitle: true,
         title: const Text(
@@ -51,7 +50,7 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
             icon: const Icon(Icons.search, color: AppColors.textDark),
             onPressed: () {},
             tooltip: 'Search',
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -64,7 +63,7 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
                 children: [
                   const SizedBox(height: 8),
                   const Text(
-                    'Upcoming',
+                    'Upcoming Events',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -86,17 +85,6 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
         foregroundColor: AppColors.textLight,
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: AppColors.lemon,
-        selectedIndex: _tabIndex,
-        onDestinationSelected: (i) => setState(() => _tabIndex = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.event), label: 'Events'),
-          NavigationDestination(icon: Icon(Icons.calendar_month), label: 'Calendar'),
-          NavigationDestination(icon: Icon(Icons.chat_bubble_outline), label: 'Chat'),
-          NavigationDestination(icon: Icon(Icons.person_outline), label: 'Profile'),
-        ],
-      ),
     );
   }
 
@@ -114,11 +102,11 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
   }
 }
 
-/* ===================== MODELO ===================== */
+
 class _EventItem {
   final String title;
   final String dateLabel;     // fecha quemada
-  final String relativeLabel; // texto quemado (ej. "In 3 days")
+  final String relativeLabel; // texto quemado 
   final String imageUrl;
 
   _EventItem({
@@ -129,7 +117,7 @@ class _EventItem {
   });
 }
 
-/* ===================== TARJETA ===================== */
+/* cards */
 class _EventTile extends StatelessWidget {
   final _EventItem item;
   const _EventTile({required this.item});
@@ -172,14 +160,18 @@ class _EventTile extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.dateLabel,
-                      style: TextStyle(color: AppColors.textDark.withOpacity(0.7))),
+                  Text(
+                    item.dateLabel,
+                    style: TextStyle(color: AppColors.textDark.withOpacity(0.7)),
+                  ),
                   const SizedBox(height: 4),
-                  Text(item.relativeLabel,
-                      style: const TextStyle(
-                        color: AppColors.orange,
-                        fontWeight: FontWeight.w600,
-                      )),
+                  const Text(
+                    'In 3 days', 
+                    style: TextStyle(
+                      color: AppColors.orange,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
               onTap: () {},
