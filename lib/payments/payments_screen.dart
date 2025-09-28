@@ -7,14 +7,14 @@ class PaymentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardCtrl = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(title: const Text("Payment")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: ListView(
             children: [
               TextFormField(decoration: const InputDecoration(labelText: "First Name")),
@@ -29,7 +29,7 @@ class PaymentsScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Payment successful ✅")),
                     );
