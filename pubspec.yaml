@@ -10,8 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   table_calendar: ^3.0.9
-
   go_router: ^16.2.2
+  flutter_riverpod: ^2.5.1
+
   
 
 dev_dependencies:
@@ -23,3 +24,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/   
+
+

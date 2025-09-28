@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class NewEventScreen extends StatelessWidget {
   const NewEventScreen({super.key});
 
-  // 👇 Nombre para GoRouter
+ 
   static const String name = 'new-event';
 
   @override

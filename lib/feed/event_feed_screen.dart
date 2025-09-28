@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:link_up/events/new_events_screen.dart';
 import '../config/theme/app_colors.dart';
+import 'package:link_up/events/events_details_screen.dart';
 
 class EventFeedScreen extends StatefulWidget {
   static const name = 'feed';
@@ -12,24 +13,26 @@ class EventFeedScreen extends StatefulWidget {
 }
 
 class _EventFeedScreenState extends State<EventFeedScreen> {
-  // EVENTOS CARDS (datos quemados)
   final List<_EventItem> _events = [
     _EventItem(
       title: 'ROATAN 2026',
       dateLabel: 'Saturday, July 20',
       relativeLabel: 'In 3 days',
+      location: 'Roatán, Honduras',
       imageUrl: 'assets/images/roatan1.jpeg',
     ),
     _EventItem(
-      title: 'fiesta Camila',
+      title: 'Fiesta Camila',
       dateLabel: 'Saturday, Aug 3',
       relativeLabel: 'In 2 weeks',
+      location: 'San Salvador, El Salvador',
       imageUrl: 'assets/images/fiesta.jpeg',
     ),
     _EventItem(
-      title: 'Hicking',
+      title: 'Hiking',
       dateLabel: 'Saturday, Aug 10',
       relativeLabel: 'In 3 weeks',
+      location: 'Mountain View Trail',
       imageUrl: 'assets/images/salidita.jpg',
     ),
   ];
@@ -95,7 +98,7 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
     );
   }
 
-  // Card contenedor de sección
+
   Widget _sectionCard({required Widget child}) {
     return Card(
       color: AppColors.surface,
@@ -111,19 +114,21 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
 
 class _EventItem {
   final String title;
-  final String dateLabel; // fecha quemada
-  final String relativeLabel; // texto quemado
+  final String dateLabel; 
+  final String relativeLabel; 
+  final String location;
   final String imageUrl;
 
   _EventItem({
     required this.title,
     required this.dateLabel,
     required this.relativeLabel,
+    required this.location,
     required this.imageUrl,
   });
 }
 
-/* cards */
+
 class _EventTile extends StatelessWidget {
   final _EventItem item;
   const _EventTile({required this.item});
@@ -135,7 +140,6 @@ class _EventTile extends StatelessWidget {
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        // ignore: deprecated_member_use
         side: BorderSide(color: AppColors.orange.withOpacity(0.25), width: 1),
       ),
       clipBehavior: Clip.hardEdge,
@@ -143,7 +147,6 @@ class _EventTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Imagen superior
           Image.asset(
             item.imageUrl,
             width: double.infinity,
@@ -151,7 +154,6 @@ class _EventTile extends StatelessWidget {
             fit: BoxFit.cover,
           ),
 
-          // Contenido
           Padding(
             padding: const EdgeInsets.all(12),
             child: ListTile(
@@ -170,21 +172,29 @@ class _EventTile extends StatelessWidget {
                   Text(
                     item.dateLabel,
                     style: TextStyle(
-                      // ignore: deprecated_member_use
                       color: AppColors.textDark.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'In 3 days',
-                    style: TextStyle(
+                  Text(
+                    item.relativeLabel,
+                    style: const TextStyle(
                       color: AppColors.orange,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
-              onTap: () {},
+              onTap: () {
+                context.goNamed(
+                  EventDetailsScreen.name,
+                  pathParameters: {
+                    'title': item.title,
+                    'date': item.dateLabel,
+                    'location': item.location,
+                  },
+                );
+              },
             ),
           ),
         ],
