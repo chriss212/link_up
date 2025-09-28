@@ -20,9 +20,19 @@ class FinancesScreen extends ConsumerWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: titleCtrl, decoration: const InputDecoration(labelText: "Title")),
-            TextField(controller: fromCtrl, decoration: const InputDecoration(labelText: "From")),
-            TextField(controller: amountCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "Amount")),
+            TextField(
+              controller: titleCtrl,
+              decoration: const InputDecoration(labelText: "Title"),
+            ),
+            TextField(
+              controller: fromCtrl,
+              decoration: const InputDecoration(labelText: "From"),
+            ),
+            TextField(
+              controller: amountCtrl,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: "Amount"),
+            ),
           ],
         ),
         actions: [
@@ -32,11 +42,13 @@ class FinancesScreen extends ConsumerWidget {
               final from = fromCtrl.text.trim();
               final amount = int.tryParse(amountCtrl.text.trim()) ?? 0;
 
-              ref.read(financesProvider.notifier).addRequest(title, from, amount);
+              ref
+                  .read(financesProvider.notifier)
+                  .addRequest(title, from, amount);
               Navigator.of(dialogContext).pop();
             },
             child: const Text("Save"),
-          )
+          ),
         ],
       ),
     );
@@ -55,10 +67,31 @@ class FinancesScreen extends ConsumerWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: "Account Name")),
-            TextField(controller: membersCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "Number of Members (2-4)")),
-            TextField(controller: expectedCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "Expected Total Amount")),
-            TextField(controller: myAmountCtrl, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: "Your Contribution Now")),
+            TextField(
+              controller: nameCtrl,
+              decoration: const InputDecoration(labelText: "Account Name"),
+            ),
+            TextField(
+              controller: membersCtrl,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: "Number of Members (2-4)",
+              ),
+            ),
+            TextField(
+              controller: expectedCtrl,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: "Expected Total Amount",
+              ),
+            ),
+            TextField(
+              controller: myAmountCtrl,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: "Your Contribution Now",
+              ),
+            ),
           ],
         ),
         actions: [
@@ -70,18 +103,20 @@ class FinancesScreen extends ConsumerWidget {
               final myAmount = int.tryParse(myAmountCtrl.text.trim()) ?? 0;
 
               if (members >= 2 && members <= 4) {
-                ref.read(financesProvider.notifier).addSharedAccount(
-                  name: name,
-                  members: members,
-                  expected: expected,
-                  contributed: myAmount,
-                );
+                ref
+                    .read(financesProvider.notifier)
+                    .addSharedAccount(
+                      name: name,
+                      members: members,
+                      expected: expected,
+                      contributed: myAmount,
+                    );
               }
 
               Navigator.of(dialogContext).pop();
             },
             child: const Text("Save"),
-          )
+          ),
         ],
       ),
     );
@@ -104,12 +139,14 @@ class FinancesScreen extends ConsumerWidget {
             onPressed: () {
               final amount = int.tryParse(amountCtrl.text.trim()) ?? 0;
               if (amount > 0) {
-                ref.read(financesProvider.notifier).addContribution(index, amount);
+                ref
+                    .read(financesProvider.notifier)
+                    .addContribution(index, amount);
               }
               Navigator.of(dialogContext).pop();
             },
             child: const Text("Save"),
-          )
+          ),
         ],
       ),
     );
@@ -141,7 +178,6 @@ class FinancesScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -152,48 +188,88 @@ class FinancesScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Overview", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Text(
+                    "Overview",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Total Spent", style: TextStyle(color: Colors.grey)),
-                      Text("\$$total", style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const Text(
+                        "Total Spent",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Text(
+                        "\$$total",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("You Paid", style: TextStyle(color: Colors.grey)),
-                      Text("\$$paid", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
+                      const Text(
+                        "You Paid",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Text(
+                        "\$$paid",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  LinearProgressIndicator(value: progress, minHeight: 8, color: Colors.orange, backgroundColor: Colors.grey[300]),
+                  LinearProgressIndicator(
+                    value: progress,
+                    minHeight: 8,
+                    color: Colors.orange,
+                    backgroundColor: Colors.grey[300],
+                  ),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Still Due", style: TextStyle(color: Colors.red[700], fontWeight: FontWeight.bold)),
+                      Text(
+                        "Still Due",
+                        style: TextStyle(
+                          color: Colors.red[700],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.orange, shape: const StadiumBorder()),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          shape: const StadiumBorder(),
+                        ),
                         onPressed: () {},
-                        child: const Text("Settle Up", style: TextStyle(color: Colors.white)),
-                      )
+                        child: const Text(
+                          "Settle Up",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
 
-     
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Payment Requests", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                IconButton(onPressed: () => _addRequest(context, ref), icon: const Icon(Icons.add_circle, color: Colors.orange)),
+                const Text(
+                  "Payment Requests",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: () => _addRequest(context, ref),
+                  icon: const Icon(Icons.add_circle, color: Colors.orange),
+                ),
               ],
             ),
             ...requests.asMap().entries.map((e) {
@@ -202,14 +278,30 @@ class FinancesScreen extends ConsumerWidget {
               return Card(
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: r["status"] == "Unpaid" ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
-                    child: Icon(r["status"] == "Unpaid" ? Icons.close : Icons.check, color: r["status"] == "Unpaid" ? Colors.red : Colors.green),
+                    // ignore: deprecated_member_use
+                    backgroundColor: r["status"] == "Unpaid"
+                        // ignore: deprecated_member_use
+                        ? Colors.red.withOpacity(0.1)
+                        // ignore: deprecated_member_use
+                        : Colors.green.withOpacity(0.1),
+                    child: Icon(
+                      r["status"] == "Unpaid" ? Icons.close : Icons.check,
+                      color: r["status"] == "Unpaid"
+                          ? Colors.red
+                          : Colors.green,
+                    ),
                   ),
                   title: Text(r["title"]),
                   subtitle: Text("Requested by ${r["from"]}"),
                   trailing: r["status"] == "Unpaid"
-                      ? ElevatedButton(onPressed: () => _payRequest(context, ref, i), child: const Text("Pay"))
-                      : const Text("Paid", style: TextStyle(color: Colors.green)),
+                      ? ElevatedButton(
+                          onPressed: () => _payRequest(context, ref, i),
+                          child: const Text("Pay"),
+                        )
+                      : const Text(
+                          "Paid",
+                          style: TextStyle(color: Colors.green),
+                        ),
                 ),
               );
             }),
@@ -219,8 +311,14 @@ class FinancesScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Split Expenses", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                IconButton(onPressed: () => _addSharedAccount(context, ref), icon: const Icon(Icons.add_circle, color: Colors.orange)),
+                const Text(
+                  "Split Expenses",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: () => _addSharedAccount(context, ref),
+                  icon: const Icon(Icons.add_circle, color: Colors.orange),
+                ),
               ],
             ),
             ...sharedAccounts.asMap().entries.map((e) {
@@ -248,17 +346,18 @@ class FinancesScreen extends ConsumerWidget {
                     ],
                   ),
                   trailing: Row(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    Text("\$${acc["contributed"]}",
-        style: const TextStyle(fontWeight: FontWeight.bold)),
-    IconButton(
-      icon: const Icon(Icons.add_circle, color: Colors.green),
-      onPressed: () => _addContribution(context, ref, i),
-    ),
-  ],
-),
-
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "\$${acc["contributed"]}",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle, color: Colors.green),
+                        onPressed: () => _addContribution(context, ref, i),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }),

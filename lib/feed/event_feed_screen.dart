@@ -15,14 +15,14 @@ class EventFeedScreen extends StatefulWidget {
 class _EventItem {
   final String title;
   final String fecha;
-  final String DiasFaltantes;
-  final String foto_evento;
+  final String diasFaltantes;
+  final String fotoEvento;
 
   const _EventItem({
     required this.title,
     required this.fecha,
-    required this.DiasFaltantes,
-    required this.foto_evento,
+    required this.diasFaltantes,
+    required this.fotoEvento,
   });
 }
 
@@ -31,20 +31,20 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
     _EventItem(
       title: 'ROATAN 2026',
       fecha: 'Saturday, July 20',
-      DiasFaltantes: 'In 3 days',
-      foto_evento: 'assets/images/roatan1.jpeg',
+      diasFaltantes: 'In 3 days',
+      fotoEvento: 'assets/images/roatan1.jpeg',
     ),
     _EventItem(
       title: 'Fiesta Camila',
       fecha: 'Saturday, Aug 3',
-      DiasFaltantes: 'In 2 weeks',
-      foto_evento: 'assets/images/fiesta.jpeg',
+      diasFaltantes: 'In 2 weeks',
+      fotoEvento: 'assets/images/fiesta.jpeg',
     ),
     _EventItem(
       title: 'Hiking',
       fecha: 'Saturday, Aug 10',
-      DiasFaltantes: 'In 3 weeks',
-      foto_evento: 'assets/images/salidita.jpg',
+      diasFaltantes: 'In 3 weeks',
+      fotoEvento: 'assets/images/salidita.jpg',
     ),
   ];
 
@@ -59,7 +59,11 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
         centerTitle: true,
         title: const Text(
           'Events',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24, color: Colors.black87),
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+            color: Colors.black87,
+          ),
         ),
         actions: [
           Container(
@@ -111,6 +115,7 @@ class _EventCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.06),
             blurRadius: 20,
             offset: const Offset(0, 4),
@@ -139,7 +144,7 @@ class _EventCard extends StatelessWidget {
                 topRight: Radius.circular(16),
               ),
               child: Image.asset(
-                item.foto_evento,
+                item.fotoEvento,
                 width: double.infinity,
                 height: 180,
                 fit: BoxFit.cover,
@@ -151,11 +156,18 @@ class _EventCard extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.image_outlined, size: 48, color: Colors.grey.shade400),
+                        Icon(
+                          Icons.image_outlined,
+                          size: 48,
+                          color: Colors.grey.shade400,
+                        ),
                         const SizedBox(height: 8),
                         Text(
                           'Image not found',
-                          style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),
@@ -170,23 +182,38 @@ class _EventCard extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey.shade500),
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 16,
+                        color: Colors.grey.shade500,
+                      ),
                       const SizedBox(width: 6),
                       Text(
                         item.fecha,
-                        style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    item.DiasFaltantes,
-                    style: const TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500),
+                    item.diasFaltantes,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -197,19 +224,36 @@ class _EventCard extends StatelessWidget {
                         clipBehavior: Clip.none,
                         children: [
                           _circle('A', Colors.blue.shade400),
-                          Positioned(left: 20, child: _circle('B', Colors.green.shade400)),
-                          Positioned(left: 40, child: _circle('+3', Colors.purple.shade400, fontSize: 10)),
+                          Positioned(
+                            left: 20,
+                            child: _circle('B', Colors.green.shade400),
+                          ),
+                          Positioned(
+                            left: 40,
+                            child: _circle(
+                              '+3',
+                              Colors.purple.shade400,
+                              fontSize: 10,
+                            ),
+                          ),
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           'View Details',
-                          style: TextStyle(color: Colors.grey.shade700, fontSize: 12, fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -233,7 +277,14 @@ class _EventCard extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 2),
       ),
       child: Center(
-        child: Text(text, style: TextStyle(color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.w600)),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }
