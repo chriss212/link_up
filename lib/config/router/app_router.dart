@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:link_up/forgotPassword/forgot_password_screen.dart';
 
-// IMPORTA TODAS LAS PANTALLAS
 import 'package:link_up/welcome/welcome_screen.dart';
 import 'package:link_up/login/login_screen.dart';
 import 'package:link_up/register/register_screen.dart';
+import 'package:link_up/forgotPassword/forgot_password_screen.dart';
+
 import 'package:link_up/feed/event_feed_screen.dart';
 import 'package:link_up/calendar/calendar_screen.dart';
 import 'package:link_up/chat/chat_screen.dart';
+
 import 'package:link_up/profile/profile_screen.dart';
-import 'package:link_up/config/theme/app_colors.dart';
+import 'package:link_up/profile/edit_personal_info_screen.dart';
+import 'package:link_up/profile/notifications_screen.dart';
+import 'package:link_up/profile/past_events_screen.dart';
+import 'package:link_up/finances/finances_screen.dart';
+import 'package:link_up/profile/wallet_screen.dart';
+
 import 'package:link_up/events/events_details_screen.dart';
 import 'package:link_up/events/new_events_screen.dart';
+
+import 'package:link_up/payments/payments_screen.dart';
+
+import 'package:link_up/config/theme/app_colors.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/welcome',
   routes: [
-    // RUTAS SIN NAVBAR
     GoRoute(
       path: '/welcome',
       name: WelcomeScreen.name,
@@ -39,17 +48,16 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
 
-    // SHELL ROUTE SOLO PARA LAS PANTALLAS CON NAVBAR
     ShellRoute(
       builder: (context, state, child) {
         final path = state.uri.toString();
         final int index = path.startsWith('/calendar')
             ? 1
             : path.startsWith('/chat')
-            ? 2
-            : path.startsWith('/profile')
-            ? 3
-            : 0; // feed por defecto
+                ? 2
+                : path.startsWith('/profile')
+                    ? 3
+                    : 0;
 
         return Scaffold(
           backgroundColor: AppColors.surface,
@@ -101,13 +109,50 @@ final GoRouter appRouter = GoRouter(
           path: '/profile',
           name: ProfileScreen.name,
           builder: (_, __) => const ProfileScreen(),
+          routes: [
+            GoRoute(
+              path: 'edit-info',
+              name: EditPersonalInfoScreen.name,
+              builder: (_, __) => const EditPersonalInfoScreen(),
+            ),
+            GoRoute(
+              path: 'notifications',
+              name: NotificationsScreen.name,
+              builder: (_, __) => const NotificationsScreen(),
+            ),
+            GoRoute(
+              path: 'past-events',
+              name: PastEventsScreen.name,
+              builder: (_, __) => const PastEventsScreen(),
+            ),
+            GoRoute(
+              path: 'finances',
+              name: FinancesScreen.name,
+              builder: (_, __) => const FinancesScreen(),
+            ),
+            GoRoute(
+              path: 'wallet',
+              name: WalletScreen.name,
+              builder: (_, __) => const WalletScreen(),
+            ),
+          ],
         ),
 
-        // 👉 NUEVAS RUTAS
         GoRoute(
-          path: '/event-details',
+          path: '/event-details/:title/:date/:location',
           name: EventDetailsScreen.name,
-          builder: (_, __) => const EventDetailsScreen(),
+          builder: (context, state) {
+            final title = state.pathParameters['title'] ?? 'Event';
+            final date = state.pathParameters['date'] ?? 'Unknown date';
+            final location =
+                state.pathParameters['location'] ?? 'Unknown location';
+
+            return EventDetailsScreen(
+              title: title,
+              date: date,
+              location: location,
+            );
+          },
         ),
         GoRoute(
           path: '/new-event',
@@ -115,6 +160,12 @@ final GoRouter appRouter = GoRouter(
           builder: (_, __) => const NewEventScreen(),
         ),
       ],
+    ),
+
+    GoRoute(
+      path: '/payments',
+      name: PaymentsScreen.name,
+      builder: (_, __) => const PaymentsScreen(),
     ),
   ],
 );
