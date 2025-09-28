@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:link_up/events/new_events_screen.dart';
 import '../config/theme/app_colors.dart';
 
 class EventFeedScreen extends StatefulWidget {
@@ -43,7 +45,10 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
         centerTitle: true,
         title: const Text(
           'Events',
-          style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: AppColors.textDark,
+          ),
         ),
         actions: [
           IconButton(
@@ -80,7 +85,9 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          context.goNamed(NewEventScreen.name);
+        },
         backgroundColor: AppColors.orange,
         foregroundColor: AppColors.textLight,
         child: const Icon(Icons.add),
@@ -102,11 +109,10 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
   }
 }
 
-
 class _EventItem {
   final String title;
-  final String dateLabel;     // fecha quemada
-  final String relativeLabel; // texto quemado 
+  final String dateLabel; // fecha quemada
+  final String relativeLabel; // texto quemado
   final String imageUrl;
 
   _EventItem({
@@ -129,6 +135,7 @@ class _EventTile extends StatelessWidget {
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
+        // ignore: deprecated_member_use
         side: BorderSide(color: AppColors.orange.withOpacity(0.25), width: 1),
       ),
       clipBehavior: Clip.hardEdge,
@@ -162,11 +169,14 @@ class _EventTile extends StatelessWidget {
                 children: [
                   Text(
                     item.dateLabel,
-                    style: TextStyle(color: AppColors.textDark.withOpacity(0.7)),
+                    style: TextStyle(
+                      // ignore: deprecated_member_use
+                      color: AppColors.textDark.withOpacity(0.7),
+                    ),
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'In 3 days', 
+                    'In 3 days',
                     style: TextStyle(
                       color: AppColors.orange,
                       fontWeight: FontWeight.w600,

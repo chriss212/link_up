@@ -10,6 +10,8 @@ import 'package:link_up/calendar/calendar_screen.dart';
 import 'package:link_up/chat/chat_screen.dart';
 import 'package:link_up/profile/profile_screen.dart';
 import 'package:link_up/config/theme/app_colors.dart';
+import 'package:link_up/events/events_details_screen.dart';
+import 'package:link_up/events/new_events_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/welcome',
@@ -40,10 +42,10 @@ final GoRouter appRouter = GoRouter(
         final int index = path.startsWith('/calendar')
             ? 1
             : path.startsWith('/chat')
-                ? 2
-                : path.startsWith('/profile')
-                    ? 3
-                    : 0; // feed por defecto
+            ? 2
+            : path.startsWith('/profile')
+            ? 3
+            : 0; // feed por defecto
 
         return Scaffold(
           backgroundColor: AppColors.surface,
@@ -58,10 +60,7 @@ final GoRouter appRouter = GoRouter(
               if (i == 3) context.goNamed(ProfileScreen.name);
             },
             destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.event),
-                label: 'Events',
-              ),
+              NavigationDestination(icon: Icon(Icons.event), label: 'Events'),
               NavigationDestination(
                 icon: Icon(Icons.calendar_month),
                 label: 'Calendar',
@@ -98,6 +97,18 @@ final GoRouter appRouter = GoRouter(
           path: '/profile',
           name: ProfileScreen.name,
           builder: (_, __) => const ProfileScreen(),
+        ),
+
+        // 👉 NUEVAS RUTAS
+        GoRoute(
+          path: '/event-details',
+          name: EventDetailsScreen.name,
+          builder: (_, __) => const EventDetailsScreen(),
+        ),
+        GoRoute(
+          path: '/new-event',
+          name: NewEventScreen.name,
+          builder: (_, __) => const NewEventScreen(),
         ),
       ],
     ),
