@@ -21,7 +21,6 @@ class LoginScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Welcome text centered
                   Column(
                     children: const [
                       SizedBox(height: 32),
@@ -65,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => context.go('/forgot'), 
+                      onPressed: () => context.go('/forgot-password'), 
                       child: const Text('Forgot password?')
                     ),
                   ),
