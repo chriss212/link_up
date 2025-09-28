@@ -161,7 +161,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     child: const ListTile(
                       leading: CircleAvatar(
                         radius: 22,
-                        backgroundImage: AssetImage(''),
+                        backgroundImage: AssetImage('assets/images/noeslevi.jpg'),
                       ),
                       title: Text('Levi', style: TextStyle(fontWeight: FontWeight.w600)),
                       subtitle: Text('Available', style: TextStyle(color: Colors.green)),
@@ -176,7 +176,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     child: const ListTile(
                       leading: CircleAvatar(
                         radius: 22,
-                        backgroundImage: AssetImage(''),
+                        backgroundImage: AssetImage('assets/images/foto_cristi.jpg'),
                       ),
                       title: Text('Cristina', style: TextStyle(fontWeight: FontWeight.w600)),
                       subtitle: Text('Not Available', style: TextStyle(color: Colors.red)),

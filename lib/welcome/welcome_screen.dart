@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:link_up/shared/widgets/primary_button.dart';
 
-// importa las pantallas para acceder a sus `name`
 import 'package:link_up/login/login_screen.dart';
 import 'package:link_up/register/register_screen.dart';
 
