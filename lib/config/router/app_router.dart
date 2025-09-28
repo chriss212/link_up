@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:link_up/forgotPassword/forgot_password_screen.dart';
 
 // IMPORTA TODAS LAS PANTALLAS
 import 'package:link_up/welcome/welcome_screen.dart';
@@ -16,29 +17,32 @@ import 'package:link_up/events/new_events_screen.dart';
 final GoRouter appRouter = GoRouter(
   initialLocation: '/welcome',
   routes: [
-    // RUTAS DE ACCESO
+    // RUTAS SIN NAVBAR
     GoRoute(
       path: '/welcome',
       name: WelcomeScreen.name,
-      builder: (_, __) => const WelcomeScreen(),
+      builder: (context, state) => const WelcomeScreen(),
     ),
     GoRoute(
       path: '/login',
       name: LoginScreen.name,
-      builder: (_, __) => const LoginScreen(),
+      builder: (context, state) => const LoginScreen(),
     ),
     GoRoute(
       path: '/register',
       name: RegisterScreen.name,
-      builder: (_, __) => const RegisterScreen(),
+      builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      name: ForgotPasswordScreen.name,
+      builder: (context, state) => const ForgotPasswordScreen(),
     ),
 
-    // SHELL ROUTE PARA LAS 4 TABS (barra inferior persistente)
+    // SHELL ROUTE SOLO PARA LAS PANTALLAS CON NAVBAR
     ShellRoute(
       builder: (context, state, child) {
         final path = state.uri.toString();
-
-        // Determina qué tab está seleccionada
         final int index = path.startsWith('/calendar')
             ? 1
             : path.startsWith('/chat')
