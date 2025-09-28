@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:link_up/events/new_events_screen.dart';
@@ -50,30 +52,34 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        foregroundColor: theme.appBarTheme.foregroundColor,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Events',
-          style: TextStyle(
+          style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w600,
-            fontSize: 24,
-            color: Colors.black87,
           ),
         ),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
+              color: colorScheme.surfaceVariant.withOpacity(0.5),
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
-              icon: Icon(Icons.search_outlined, color: Colors.grey.shade600),
+              icon: Icon(
+                Icons.search_outlined,
+                color: colorScheme.onSurface.withOpacity(0.6),
+              ),
               onPressed: () {},
             ),
           ),
@@ -92,8 +98,8 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
         height: 56,
         child: FloatingActionButton(
           onPressed: () => context.goNamed(NewEventScreen.name),
-          backgroundColor: Colors.black87,
-          foregroundColor: Colors.white,
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
           elevation: 2,
           child: const Icon(Icons.add, size: 24),
         ),
@@ -109,13 +115,15 @@ class _EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.06),
             blurRadius: 20,
             offset: const Offset(0, 4),
@@ -125,7 +133,6 @@ class _EventCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          // Navegar al detalle (opcional)
           context.goNamed(
             EventDetailsScreen.name,
             pathParameters: {
@@ -152,21 +159,20 @@ class _EventCard extends StatelessWidget {
                   return Container(
                     width: double.infinity,
                     height: 180,
-                    color: Colors.grey.shade200,
+                    color: colorScheme.surfaceVariant.withOpacity(0.3),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.image_outlined,
                           size: 48,
-                          color: Colors.grey.shade400,
+                          color: colorScheme.onSurface.withOpacity(0.4),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Image not found',
-                          style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontSize: 12,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurface.withOpacity(0.5),
                           ),
                         ),
                       ],
@@ -182,10 +188,8 @@ class _EventCard extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -194,14 +198,13 @@ class _EventCard extends StatelessWidget {
                       Icon(
                         Icons.calendar_today_outlined,
                         size: 16,
-                        color: Colors.grey.shade500,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 6),
                       Text(
                         item.fecha,
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 16,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -209,9 +212,7 @@ class _EventCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     item.diasFaltantes,
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16,
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -223,16 +224,16 @@ class _EventCard extends StatelessWidget {
                       Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          _circle('A', Colors.blue.shade400),
+                          _circle('A', colorScheme.primary),
                           Positioned(
                             left: 20,
-                            child: _circle('B', Colors.green.shade400),
+                            child: _circle('B', colorScheme.secondary),
                           ),
                           Positioned(
                             left: 40,
                             child: _circle(
                               '+3',
-                              Colors.purple.shade400,
+                              colorScheme.tertiary,
                               fontSize: 10,
                             ),
                           ),
@@ -244,14 +245,13 @@ class _EventCard extends StatelessWidget {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: colorScheme.surfaceVariant.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           'View Details',
-                          style: TextStyle(
-                            color: Colors.grey.shade700,
-                            fontSize: 12,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

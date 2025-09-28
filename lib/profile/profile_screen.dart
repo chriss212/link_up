@@ -7,9 +7,10 @@ import 'notifications_screen.dart';
 import 'past_events_screen.dart';
 import '../finances/finances_screen.dart';
 import 'wallet_screen.dart';
-import 'wallet_provider.dart'; 
+import 'wallet_provider.dart';
 import 'profile_provider.dart';
 import 'package:link_up/finances/finances_provider.dart';
+import 'package:link_up/config/theme/theme_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
   static const name = 'profile';
@@ -17,6 +18,8 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text("Profile")),
       body: ListView(
@@ -59,6 +62,20 @@ class ProfileScreen extends ConsumerWidget {
             onTap: () => context.pushNamed(WalletScreen.name),
           ),
           const Divider(),
+
+          // ✅ Switch de tema
+          SwitchListTile(
+            secondary: const Icon(Icons.brightness_6),
+            title: const Text("Dark Mode"),
+            value: theme == ThemeModeType.dark,
+            onChanged: (value) {
+              ref
+                  .read(themeProvider.notifier)
+                  .setTheme(value ? ThemeModeType.dark : ThemeModeType.light);
+            },
+          ),
+
+          const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text("Log Out", style: TextStyle(color: Colors.red)),
@@ -66,10 +83,6 @@ class ProfileScreen extends ConsumerWidget {
               ref.read(walletProvider.notifier).reset();
               ref.read(profileProvider.notifier).reset();
               ref.read(financesProvider.notifier).reset();
-
-
-
-
               context.go('/welcome');
             },
           ),
