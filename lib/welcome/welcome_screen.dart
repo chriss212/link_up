@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:link_up/shared/widgets/primary_button.dart';
 
+// importa las pantallas para acceder a sus `name`
+import 'package:link_up/login/login_screen.dart';
+import 'package:link_up/register/register_screen.dart';
+
 class WelcomeScreen extends StatelessWidget {
+  static const name = 'welcome';
   const WelcomeScreen({super.key});
 
   @override
@@ -10,9 +15,7 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 360,
-          ),
+          constraints: const BoxConstraints(maxWidth: 360),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -33,14 +36,22 @@ class WelcomeScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 32),
+
                 SizedBox(
                   height: 48,
-                  child: PrimaryButton(label: 'Log In', onPressed: () => context.go('/login')),
+                  child: PrimaryButton(
+                    label: 'Log In',
+                    onPressed: () => context.goNamed(LoginScreen.name),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
                   height: 48,
-                  child: PrimaryButton(label: 'Register', onPressed: () => context.go('/register'), filled: false),
+                  child: PrimaryButton(
+                    label: 'Register',
+                    onPressed: () => context.goNamed(RegisterScreen.name),
+                    filled: false,
+                  ),
                 ),
               ],
             ),

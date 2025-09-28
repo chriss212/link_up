@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:link_up/feed/event_feed_screen.dart';
+import 'package:link_up/register/register_screen.dart';
 import 'package:link_up/shared/widgets/primary_button.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const name = 'login';
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () => context.go('/welcome'), icon: const Icon(Icons.arrow_back)),
+        leading: IconButton(
+          onPressed: () => context.go('/welcome'),
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -54,13 +60,13 @@ class LoginScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       suffixIcon: IconButton(
-                        onPressed: () => (() => {},),
-                        icon: Icon(Icons.visibility),
+                        onPressed: () {},
+                        icon: const Icon(Icons.visibility),
                       ),
                     ),
                     obscureText: true,
                   ),
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -68,18 +74,19 @@ class LoginScreen extends StatelessWidget {
                       child: const Text('Forgot password?')
                     ),
                   ),
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 8),
                   SizedBox(
                     height: 48,
                     child: PrimaryButton(
-                      label:  'Log In',
-                      onPressed: () => context.go('/home'),
+                      label: 'Log In',
+                      onPressed: () => context.goNamed(EventFeedScreen.name),
                     ),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 48,
                     child: OutlinedButton.icon(
+                      icon: const Icon(Icons.login),
                       label: const Text('Continue with Google'),
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
@@ -94,7 +101,7 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       const Text("Don't have an account? "),
                       TextButton(
-                        onPressed: () => context.go('/register'),
+                        onPressed: () => context.goNamed(RegisterScreen.name),
                         child: const Text('Sign up'),
                       ),
                     ],
