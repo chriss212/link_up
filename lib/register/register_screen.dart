@@ -97,7 +97,7 @@ class RegisterScreen extends StatelessWidget {
                     height: 48,
                     child: OutlinedButton.icon(
                       label: const Text('Continue with Google'),
-                      onPressed: () {},
+                      onPressed: () => context.go('/feed'),
                       style: OutlinedButton.styleFrom(
                         shape: const StadiumBorder(),
                         minimumSize: const Size.fromHeight(48),

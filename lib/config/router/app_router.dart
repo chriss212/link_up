@@ -15,13 +15,32 @@ import 'package:link_up/config/theme/app_colors.dart';
 final GoRouter appRouter = GoRouter(
   initialLocation: '/welcome',
   routes: [
+    // RUTAS SIN NAVBAR
+    GoRoute(
+      path: '/welcome',
+      name: WelcomeScreen.name,
+      builder: (context, state) => const WelcomeScreen(),
+    ),
+    GoRoute(
+      path: '/login',
+      name: LoginScreen.name,
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/register',
+      name: RegisterScreen.name,
+      builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      name: ForgotPasswordScreen.name,
+      builder: (context, state) => const ForgotPasswordScreen(),
+    ),
 
-    // SHELL ROUTE PARA LAS 4 TABS (barra inferior persistente)
+    // SHELL ROUTE SOLO PARA LAS PANTALLAS CON NAVBAR
     ShellRoute(
       builder: (context, state, child) {
         final path = state.uri.toString();
-
-        // Determina qué tab está seleccionada
         final int index = path.startsWith('/calendar')
             ? 1
             : path.startsWith('/chat')
@@ -64,22 +83,6 @@ final GoRouter appRouter = GoRouter(
         );
       },
       routes: [
-        GoRoute(
-          path: '/welcome', 
-          name: WelcomeScreen.name,
-          builder: (context, state) => const WelcomeScreen()),
-        GoRoute(
-          path: '/login', 
-          name: LoginScreen.name,
-          builder: (context, state) => const LoginScreen()),
-        GoRoute(
-          path: '/register', 
-          name: RegisterScreen.name,
-          builder: (context, state) => const RegisterScreen()),
-        GoRoute(
-          path: '/forgot-password', 
-          name: ForgotPasswordScreen.name,
-          builder: (context, status) => const ForgotPasswordScreen()),
         GoRoute(
           path: '/feed',
           name: EventFeedScreen.name,

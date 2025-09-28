@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:link_up/feed/event_feed_screen.dart';
-import 'package:link_up/register/register_screen.dart';
 import 'package:link_up/shared/widgets/primary_button.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -79,7 +77,7 @@ class LoginScreen extends StatelessWidget {
                     height: 48,
                     child: PrimaryButton(
                       label: 'Log In',
-                      onPressed: () => context.goNamed(EventFeedScreen.name),
+                      onPressed: () => context.go('/feed'),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -88,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                     child: OutlinedButton.icon(
                       icon: const Icon(Icons.login),
                       label: const Text('Continue with Google'),
-                      onPressed: () {},
+                      onPressed: () => context.go('/feed'),
                       style: OutlinedButton.styleFrom(
                         shape: const StadiumBorder(),
                         minimumSize: const Size.fromHeight(48),
@@ -101,7 +99,7 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       const Text("Don't have an account? "),
                       TextButton(
-                        onPressed: () => context.goNamed(RegisterScreen.name),
+                        onPressed: () => context.go('/register'),
                         child: const Text('Sign up'),
                       ),
                     ],
