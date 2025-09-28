@@ -21,7 +21,7 @@ class WelcomeScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const FlutterLogo(size: 96),
+                Image.asset('assets/images/logolinkup.png', height: 96),
                 const SizedBox(height: 16),
                 Text(
                   'LinkUp',
