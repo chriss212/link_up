@@ -108,7 +108,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         ? 'Rango: ${_rangeStart!.toString().split(" ").first} → ${_rangeEnd!.toString().split(" ").first}'
                         : _selectedDay != null
                             ? 'Día: ${_selectedDay!.toString().split(" ").first}'
-                            : 'Selecciona un día o un rango',
+                            : 'Select a date or date range',
                   ),
 
                   const SizedBox(height: 16),
@@ -146,7 +146,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     child: const ListTile(
                       leading: CircleAvatar(
                         radius: 22,
-                        backgroundImage: AssetImage('assets/images/CHRISTIAN.jpeg'),
+                        backgroundImage: AssetImage('assets/images/CHRISTIAN.jpg'),
                       ),
                       title: Text('Christian', style: TextStyle(fontWeight: FontWeight.w600)),
                       subtitle: Text('Available', style: TextStyle(color: Colors.green)),
@@ -200,7 +200,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         ),
                       );
                     },
-                    child: const Text('Listo'),
+                    child: const Text('OK'),
                   ),
                 ],
               ),

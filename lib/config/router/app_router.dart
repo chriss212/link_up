@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:link_up/forgotPassword/forgot_password_screen.dart';
-
-// IMPORTA TODAS LAS PANTALLAS
+import 'package:link_up/smartPlanner/smart_planner_screen.dart';
 import 'package:link_up/welcome/welcome_screen.dart';
 import 'package:link_up/login/login_screen.dart';
 import 'package:link_up/register/register_screen.dart';
 import 'package:link_up/feed/event_feed_screen.dart';
 import 'package:link_up/calendar/calendar_screen.dart';
-import 'package:link_up/chat/chat_screen.dart';
 import 'package:link_up/profile/profile_screen.dart';
 import 'package:link_up/config/theme/app_colors.dart';
 
@@ -43,7 +41,7 @@ final GoRouter appRouter = GoRouter(
         final path = state.uri.toString();
         final int index = path.startsWith('/calendar')
             ? 1
-            : path.startsWith('/chat')
+            : path.startsWith('/smart-planner')
                 ? 2
                 : path.startsWith('/profile')
                     ? 3
@@ -58,7 +56,7 @@ final GoRouter appRouter = GoRouter(
             onDestinationSelected: (i) {
               if (i == 0) context.goNamed(EventFeedScreen.name);
               if (i == 1) context.goNamed(CalendarScreen.name);
-              if (i == 2) context.goNamed(ChatScreen.name);
+              if (i == 2) context.goNamed(SmartPlannerScreen.name);
               if (i == 3) context.goNamed(ProfileScreen.name);
             },
             destinations: const [
@@ -71,8 +69,8 @@ final GoRouter appRouter = GoRouter(
                 label: 'Calendar',
               ),
               NavigationDestination(
-                icon: Icon(Icons.chat_bubble_outline),
-                label: 'Chat',
+                icon: Icon(Icons.lightbulb_outline),
+                label: 'Smart Planner',
               ),
               NavigationDestination(
                 icon: Icon(Icons.person_outline),
@@ -94,9 +92,9 @@ final GoRouter appRouter = GoRouter(
           builder: (_, __) => const CalendarScreen(),
         ),
         GoRoute(
-          path: '/chat',
-          name: ChatScreen.name,
-          builder: (_, __) => const ChatScreen(),
+          path: '/smart-planner',
+          name: SmartPlannerScreen.name,
+          builder: (_, __) => const SmartPlannerScreen(),
         ),
         GoRoute(
           path: '/profile',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:link_up/config/router/app_router.dart';
+import 'package:link_up/config/theme/app_colors.dart';
 
 void main() {
   runApp(const MainApp());
@@ -15,7 +16,7 @@ class MainApp extends StatelessWidget {
       title: 'LinkUp',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFFEB7A36)),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orange,),
       ),
       routerConfig: appRouter,
     );

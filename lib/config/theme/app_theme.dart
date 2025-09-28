@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:link_up/config/theme/app_colors.dart';
 
 class AppTheme {
-  final Color seed = const Color(0xFFFF9B17);
+  final Color seed = AppColors.orange;
 
   ThemeData getTheme() => ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: seed, brightness: Brightness.light),
     useMaterial3: true,
-    scaffoldBackgroundColor: const Color(0xFFF9F7F5),
+    scaffoldBackgroundColor: AppColors.background,
     inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(),
     filled: true,
-    fillColor: Colors.white,
+    fillColor: AppColors.surface,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
   style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(48), shape: const StadiumBorder()),
