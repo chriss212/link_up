@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'config/theme/theme_provider.dart';
 import 'config/theme/app_theme.dart';
 import 'config/router/app_router.dart';
+import 'package:link_up/config/theme/app_colors.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -16,12 +17,12 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(
-      title: 'Tu App',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode == ThemeModeType.light
-          ? ThemeMode.light
-          : ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      title: 'LinkUp',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orange,),
+      ),
       routerConfig: appRouter,
     );
   }
