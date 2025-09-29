@@ -23,13 +23,6 @@ class MyApp extends ConsumerWidget {
       themeMode: mode == ThemeModeType.dark
           ? ThemeMode.dark
           : ThemeMode.light, // conecta tu enum con ThemeMode real
-      debugShowCheckedModeBanner: false,
-      title: 'Tu App',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode == ThemeModeType.light
-          ? ThemeMode.light
-          : ThemeMode.dark,
       routerConfig: appRouter,
     );
   }
