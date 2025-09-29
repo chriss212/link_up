@@ -104,9 +104,6 @@ final GoRouter appRouter = GoRouter(
           path: '/smart-planner',
           name: SmartPlannerScreen.name,
           builder: (_, __) => const SmartPlannerScreen(),
-          path: '/smart-planner',
-          name: SmartPlannerScreen.name,
-          builder: (_, __) => const SmartPlannerScreen(),
         ),
         GoRoute(
           path: '/profile',
