@@ -15,7 +15,6 @@ dependencies:
   flutter_riverpod: ^3.0.0
   riverpod: ^3.0.0
   riverpod_generator: ^3.0.0
-  flutter_riverpod: ^2.5.1
 
   
 

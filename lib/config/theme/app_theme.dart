@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:link_up/config/theme/app_colors.dart';
 
 class AppTheme {
-  final Color seed = AppColors.orange;
+  static const Color seed = Color(0xFFFF9B17);
 
   /// 🌞 Tema claro
   static final ThemeData lightTheme = ThemeData(
@@ -11,16 +10,18 @@ class AppTheme {
       brightness: Brightness.light,
     ),
     useMaterial3: true,
-    scaffoldBackgroundColor: AppColors.background,
+    scaffoldBackgroundColor: const Color(0xFFF9F7F5),
     inputDecorationTheme: const InputDecorationTheme(
-    border: OutlineInputBorder(),
-    filled: true,
-    fillColor: AppColors.surface,
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-  style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(48), shape: const StadiumBorder()),
-  ),
-  
+      border: OutlineInputBorder(),
+      filled: true,
+      fillColor: Colors.white,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size.fromHeight(48),
+        shape: const StadiumBorder(),
+      ),
+    ),
   );
 
   /// 🌚 Tema oscuro
