@@ -1,5 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
-import '../config/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:link_up/events/new_events_screen.dart';
+import 'package:link_up/events/events_details_screen.dart';
 
 class EventFeedScreen extends StatefulWidget {
   static const name = 'feed';
@@ -9,175 +13,278 @@ class EventFeedScreen extends StatefulWidget {
   State<EventFeedScreen> createState() => _EventFeedScreenState();
 }
 
+// ===== Modelo + datos quemados =====
+class _EventItem {
+  final String title;
+  final String fecha;
+  final String diasFaltantes;
+  final String fotoEvento;
+
+  const _EventItem({
+    required this.title,
+    required this.fecha,
+    required this.diasFaltantes,
+    required this.fotoEvento,
+  });
+}
+
 class _EventFeedScreenState extends State<EventFeedScreen> {
-  // EVENTOS CARDS (datos quemados)
-  final List<_EventItem> _events = [
+  final List<_EventItem> _events = const [
     _EventItem(
       title: 'ROATAN 2026',
-      dateLabel: 'Saturday, July 20',
-      relativeLabel: 'In 3 days',
-      imageUrl: 'assets/images/roatan1.jpeg',
+      fecha: 'Saturday, July 20',
+      diasFaltantes: 'In 3 days',
+      fotoEvento: 'assets/images/roatan1.jpeg',
     ),
     _EventItem(
-      title: 'fiesta Camila',
-      dateLabel: 'Saturday, Aug 3',
-      relativeLabel: 'In 2 weeks',
-      imageUrl: 'assets/images/fiesta.jpeg',
+      title: 'Fiesta Camila',
+      fecha: 'Saturday, Aug 3',
+      diasFaltantes: 'In 2 weeks',
+      fotoEvento: 'assets/images/fiesta.jpeg',
     ),
     _EventItem(
-      title: 'Hicking',
-      dateLabel: 'Saturday, Aug 10',
-      relativeLabel: 'In 3 weeks',
-      imageUrl: 'assets/images/salidita.jpg',
+      title: 'Hiking',
+      fecha: 'Saturday, Aug 10',
+      diasFaltantes: 'In 3 weeks',
+      fotoEvento: 'assets/images/salidita.jpg',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: AppColors.surface,
-        foregroundColor: AppColors.textDark,
+        backgroundColor: theme.appBarTheme.backgroundColor,
+        foregroundColor: theme.appBarTheme.foregroundColor,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Events',
-          style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark),
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: AppColors.textDark),
-            onPressed: () {},
-            tooltip: 'Search',
+          Container(
+            margin: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceVariant.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconButton(
+              icon: Icon(
+                Icons.search_outlined,
+                color: colorScheme.onSurface.withOpacity(0.6),
+              ),
+              onPressed: () {},
+            ),
           ),
         ],
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        child: ListView.separated(
+          padding: const EdgeInsets.all(20),
+          itemCount: _events.length,
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
+          itemBuilder: (context, index) => _EventCard(item: _events[index]),
+        ),
+      ),
+      floatingActionButton: SizedBox(
+        width: 56,
+        height: 56,
+        child: FloatingActionButton(
+          onPressed: () => context.goNamed(NewEventScreen.name),
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+          elevation: 2,
+          child: const Icon(Icons.add, size: 24),
+        ),
+      ),
+    );
+  }
+}
+
+// ===== Tarjeta de evento =====
+class _EventCard extends StatelessWidget {
+  final _EventItem item;
+  const _EventCard({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          context.goNamed(
+            EventDetailsScreen.name,
+            pathParameters: {
+              'title': item.title,
+              'date': item.fecha,
+              'location': 'TBD',
+            },
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _sectionCard(
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+              child: Image.asset(
+                item.fotoEvento,
+                width: double.infinity,
+                height: 180,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: double.infinity,
+                    height: 180,
+                    color: colorScheme.surfaceVariant.withOpacity(0.3),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.image_outlined,
+                          size: 48,
+                          color: colorScheme.onSurface.withOpacity(0.4),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Image not found',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Upcoming Events',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textDark,
+                  Text(
+                    item.title,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  for (final e in _events) _EventTile(item: e),
                   const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 16,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        item.fecha,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    item.diasFaltantes,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Avatares de ejemplo
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          _circle('A', colorScheme.primary),
+                          Positioned(
+                            left: 20,
+                            child: _circle('B', colorScheme.secondary),
+                          ),
+                          Positioned(
+                            left: 40,
+                            child: _circle(
+                              '+3',
+                              colorScheme.tertiary,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceVariant.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'View Details',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppColors.orange,
-        foregroundColor: AppColors.textLight,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 
-  // Card contenedor de sección
-  Widget _sectionCard({required Widget child}) {
-    return Card(
-      color: AppColors.surface,
-      elevation: 1.5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: child,
+  Widget _circle(String text, Color color, {double fontSize = 12}) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 2),
       ),
-    );
-  }
-}
-
-
-class _EventItem {
-  final String title;
-  final String dateLabel;     // fecha quemada
-  final String relativeLabel; // texto quemado 
-  final String imageUrl;
-
-  _EventItem({
-    required this.title,
-    required this.dateLabel,
-    required this.relativeLabel,
-    required this.imageUrl,
-  });
-}
-
-/* cards */
-class _EventTile extends StatelessWidget {
-  final _EventItem item;
-  const _EventTile({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: AppColors.surface,
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: BorderSide(color: AppColors.orange.withOpacity(0.25), width: 1),
-      ),
-      clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Imagen superior
-          Image.asset(
-            item.imageUrl,
-            width: double.infinity,
-            height: 150,
-            fit: BoxFit.cover,
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600,
           ),
-
-          // Contenido
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.event, color: AppColors.orange),
-              title: Text(
-                item.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textDark,
-                ),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.dateLabel,
-                    style: TextStyle(color: AppColors.textDark.withOpacity(0.7)),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'In 3 days', 
-                    style: TextStyle(
-                      color: AppColors.orange,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {},
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
