@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_up/config/theme/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;
@@ -18,8 +19,8 @@ class PrimaryButton extends StatelessWidget {
     if (filled) {
       return ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFEB7A36), // Bright orange
-          foregroundColor: Colors.white, // Text color
+          backgroundColor: AppColors.orange, // Bright orange
+          foregroundColor: AppColors.surface, // Text color
           shape: const StadiumBorder(),
           minimumSize: const Size.fromHeight(48),
         ),

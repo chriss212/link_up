@@ -4,8 +4,10 @@ import 'app_theme.dart';
 
 enum ThemeModeType { light, dark }
 
-class ThemeNotifier extends StateNotifier<ThemeModeType> {
-  ThemeNotifier() : super(ThemeModeType.light);
+/// Notifier de Riverpod v3
+class ThemeNotifier extends Notifier<ThemeModeType> {
+  @override
+  ThemeModeType build() => ThemeModeType.light;
 
   void toggleTheme() {
     state = state == ThemeModeType.light
@@ -18,11 +20,11 @@ class ThemeNotifier extends StateNotifier<ThemeModeType> {
   }
 }
 
-final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeModeType>(
-  (ref) => ThemeNotifier(),
-);
+/// Provider para leer/escuchar el modo de tema
+final themeProvider =
+    NotifierProvider<ThemeNotifier, ThemeModeType>(ThemeNotifier.new);
 
-/// Helper opcional si quieres obtener ThemeData directamente
+/// Helper para mapear tu enum a ThemeData
 ThemeData getThemeFromMode(ThemeModeType mode) {
   switch (mode) {
     case ThemeModeType.dark:

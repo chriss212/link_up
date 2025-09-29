@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class WalletNotifier extends StateNotifier<double> {
-  WalletNotifier() : super(0.0);
+class WalletNotifier extends Notifier<double> {
+  @override
+  double build() {
+    return 0.0; // estado inicial
+  }
 
   void addMoney(double amount) {
     state += amount;
@@ -12,6 +15,6 @@ class WalletNotifier extends StateNotifier<double> {
   }
 }
 
-final walletProvider = StateNotifierProvider<WalletNotifier, double>((ref) {
-  return WalletNotifier();
-});
+final walletProvider = NotifierProvider<WalletNotifier, double>(
+  WalletNotifier.new,
+);
