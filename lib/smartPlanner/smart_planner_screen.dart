@@ -28,13 +28,11 @@ class _SmartPlannerScreenState extends State<SmartPlannerScreen> {
     });
     _scrollToBottom();
 
-    // --- MOCK de respuesta del “asistente” ---
     await Future.delayed(const Duration(milliseconds: 600));
     final reply = _mockPlannerReply(text);
 
     setState(() {
       _messages.add(_Msg(role: Role.assistant, text: reply));
-      // Add the "Add trip to your feed" message with a button
       _messages.add(_Msg(role: Role.action, text: 'add_trip'));
       _sending = false;
     });
@@ -82,7 +80,7 @@ Plan: City break
 • Budget: \$70 per person
 
 Activities:
-• Walking tour of Fisherman’s Wharf
+• Walking tour of Fisherman's Wharf
 • Visit to a local museum
 • Chinatown food crawl
 • Golden Gate Park picnic
@@ -142,20 +140,37 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
 
   @override
   Widget build(BuildContext context) {
+    // Detectar tema actual
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final colorScheme = theme.colorScheme;
+    
+    // Colores adaptativos
     final orange = AppColors.orange;
-    final surface = AppColors.surface;
-    final assistantBg = AppColors.peach.withOpacity(0.85);
+    final surface = theme.scaffoldBackgroundColor;
+    final textPrimary = colorScheme.onSurface;
+    final textSecondary = colorScheme.onSurface.withOpacity(0.6);
+    
+    // Colores de mensajes según el tema
+    final assistantBg = isDark 
+        ? colorScheme.surfaceContainerHighest
+        : AppColors.peach.withOpacity(0.85);
+    final userBg = orange.withOpacity(isDark ? 0.85 : 0.93);
+    final userTextColor = isDark ? Colors.white : Colors.white;
+    final assistantTextColor = isDark ? colorScheme.onSurface : AppColors.textDark;
 
     return Scaffold(
       backgroundColor: surface,
       body: Stack(
         children: [
-
           Positioned(
             top: 60,
             right: -40,
-            child: Icon(Icons.lightbulb_circle_rounded,
-                size: 180, color: AppColors.orange.withOpacity(0.06)),
+            child: Icon(
+              Icons.lightbulb_circle_rounded,
+              size: 180,
+              color: orange.withOpacity(isDark ? 0.04 : 0.06),
+            ),
           ),
           Column(
             children: [
@@ -167,8 +182,8 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                   children: [
                     CircleAvatar(
                       radius: 22,
-                      backgroundColor: AppColors.orange,
-                      child: Icon(Icons.bolt_rounded, color: Colors.white, size: 28),
+                      backgroundColor: orange,
+                      child: const Icon(Icons.bolt_rounded, color: Colors.white, size: 28),
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -176,7 +191,7 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 20,
-                        color: AppColors.textDark,
+                        color: textPrimary,
                       ),
                     ),
                   ],
@@ -187,7 +202,7 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                 child: Text(
                   "Plan your next adventure with AI suggestions!",
                   style: TextStyle(
-                    color: AppColors.textLight,
+                    color: textSecondary,
                     fontSize: 15,
                   ),
                   textAlign: TextAlign.center,
@@ -203,19 +218,22 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                     _SuggestionChip(
                       text: 'Beach day for 8 people, \$40 each',
                       onTap: _fillPrompt,
-                      color: AppColors.orange,
+                      color: orange,
+                      isDark: isDark,
                     ),
                     const SizedBox(width: 8),
                     _SuggestionChip(
                       text: 'Disneyland trip, 4 people, budget \$250 p/p',
                       onTap: _fillPrompt,
-                      color: AppColors.orange,
+                      color: orange,
+                      isDark: isDark,
                     ),
                     const SizedBox(width: 8),
                     _SuggestionChip(
                       text: 'City break 2 days, 3 people, budget \$70 p/p',
                       onTap: _fillPrompt,
-                      color: AppColors.orange,
+                      color: orange,
+                      isDark: isDark,
                     ),
                   ],
                 ),
@@ -225,7 +243,7 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                 child: Divider(
                   height: 1,
                   thickness: 1,
-                  color: AppColors.orange.withOpacity(0.10),
+                  color: orange.withOpacity(isDark ? 0.15 : 0.10),
                 ),
               ),
               // Messages
@@ -238,7 +256,6 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                     final m = _messages[i];
                     final isUser = m.role == Role.user;
                     if (m.role == Role.action && m.text == 'add_trip') {
-                      // Show the "Add trip to your feed" message with a button
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 18.0),
                         child: Center(
@@ -249,7 +266,7 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16,
-                                  color: AppColors.textDark,
+                                  color: textPrimary,
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -258,8 +275,8 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                                 icon: const Icon(Icons.add_location_alt_rounded),
                                 label: const Text("Add to Feed"),
                                 style: FilledButton.styleFrom(
-                                  backgroundColor: AppColors.orange,
-                                  foregroundColor: AppColors.surface,
+                                  backgroundColor: orange,
+                                  foregroundColor: Colors.white,
                                   shape: const StadiumBorder(),
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                 ),
@@ -276,9 +293,7 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         constraints: const BoxConstraints(maxWidth: 320),
                         decoration: BoxDecoration(
-                          color: isUser
-                              ? orange.withOpacity(0.93)
-                              : assistantBg,
+                          color: isUser ? userBg : assistantBg,
                           borderRadius: BorderRadius.only(
                             topLeft: const Radius.circular(18),
                             topRight: const Radius.circular(18),
@@ -287,7 +302,9 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.textDark.withOpacity(0.04),
+                              color: isDark 
+                                  ? Colors.black.withOpacity(0.3)
+                                  : Colors.black.withOpacity(0.04),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
                             ),
@@ -296,7 +313,7 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                         child: Text(
                           m.text,
                           style: TextStyle(
-                            color: isUser ? AppColors.surface : AppColors.textDark,
+                            color: isUser ? userTextColor : assistantTextColor,
                             fontSize: 15.5,
                           ),
                         ),
@@ -309,9 +326,9 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 12),
                 child: Material(
-                  elevation: 6,
+                  elevation: isDark ? 4 : 6,
                   borderRadius: BorderRadius.circular(22),
-                  color: AppColors.surface,
+                  color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: Row(
@@ -331,8 +348,10 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                             minLines: 1,
                             maxLines: 4,
                             textInputAction: TextInputAction.newline,
+                            style: TextStyle(color: textPrimary),
                             decoration: InputDecoration(
                               hintText: 'Describe your fabulous plan...',
+                              hintStyle: TextStyle(color: textSecondary),
                               border: InputBorder.none,
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
@@ -345,14 +364,20 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
                           onPressed: _sending ? null : _send,
                           style: FilledButton.styleFrom(
                             backgroundColor: orange,
-                            foregroundColor: AppColors.surface,
+                            foregroundColor: Colors.white,
                             shape: const StadiumBorder(),
                             minimumSize: const Size(44, 44),
                             padding: const EdgeInsets.symmetric(horizontal: 0),
                           ),
                           child: _sending
                               ? const SizedBox(
-                                  width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                  width: 16, 
+                                  height: 16, 
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2, 
+                                    color: Colors.white,
+                                  ),
+                                )
                               : const Icon(Icons.send_rounded, size: 20),
                         ),
                       ],
@@ -377,7 +402,14 @@ class _SuggestionChip extends StatelessWidget {
   final String text;
   final void Function(String) onTap;
   final Color color;
-  const _SuggestionChip({required this.text, required this.onTap, required this.color});
+  final bool isDark;
+  
+  const _SuggestionChip({
+    required this.text, 
+    required this.onTap, 
+    required this.color,
+    required this.isDark,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -385,12 +417,15 @@ class _SuggestionChip extends StatelessWidget {
       label: Text(
         text,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: color, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          color: color, 
+          fontWeight: FontWeight.w600,
+        ),
       ),
       onPressed: () => onTap(text),
       shape: const StadiumBorder(),
-      backgroundColor: color.withOpacity(0.10),
-      side: BorderSide(color: color.withOpacity(0.18)),
+      backgroundColor: color.withOpacity(isDark ? 0.15 : 0.10),
+      side: BorderSide(color: color.withOpacity(isDark ? 0.25 : 0.18)),
       elevation: 0,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
     );
