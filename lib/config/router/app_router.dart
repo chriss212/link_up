@@ -5,7 +5,6 @@ import 'package:link_up/smartPlanner/smart_planner_screen.dart';
 import 'package:link_up/welcome/welcome_screen.dart';
 import 'package:link_up/login/login_screen.dart';
 import 'package:link_up/register/register_screen.dart';
-import 'package:link_up/forgotPassword/forgot_password_screen.dart';
 
 import 'package:link_up/feed/event_feed_screen.dart';
 import 'package:link_up/calendar/calendar_screen.dart';
