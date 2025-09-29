@@ -61,7 +61,6 @@ class ProfileScreen extends ConsumerWidget {
                     backgroundColor: colorScheme.surface,
                     backgroundImage: const AssetImage('assets/images/foto_cristi.jpg'),
                     onBackgroundImageError: (_, __) {},
-                    child: const Icon(Icons.person, size: 50),
                   ),
                 ),
                 const SizedBox(height: 16),
