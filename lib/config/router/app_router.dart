@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:link_up/config/theme/app_colors.dart';
+import 'package:link_up/forgotPassword/forgot_password_screen.dart';
 import 'package:link_up/smartPlanner/smart_planner_screen.dart';
 
 import 'package:link_up/welcome/welcome_screen.dart';
 import 'package:link_up/login/login_screen.dart';
 import 'package:link_up/register/register_screen.dart';
-import 'package:link_up/forgotPassword/forgot_password_screen.dart';
 
 import 'package:link_up/feed/event_feed_screen.dart';
 import 'package:link_up/calendar/calendar_screen.dart';
@@ -21,8 +22,6 @@ import 'package:link_up/events/events_details_screen.dart';
 import 'package:link_up/events/new_events_screen.dart';
 
 import 'package:link_up/payments/payments_screen.dart';
-
-import 'package:link_up/config/theme/app_colors.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/welcome',
@@ -59,11 +58,19 @@ final GoRouter appRouter = GoRouter(
                     ? 3
                     : 0;
 
+        // Detectar tema actual
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+        final colorScheme = theme.colorScheme;
+
         return Scaffold(
-          backgroundColor: AppColors.surface,
+          backgroundColor: theme.scaffoldBackgroundColor,
           body: SafeArea(child: child),
           bottomNavigationBar: NavigationBar(
-            backgroundColor: AppColors.peach,
+            backgroundColor: isDark 
+                ? colorScheme.surfaceContainer
+                : Colors.white,
+            indicatorColor: AppColors.orange.withOpacity(isDark ? 0.25 : 0.15),
             selectedIndex: index,
             onDestinationSelected: (i) {
               if (i == 0) context.goNamed(EventFeedScreen.name);
@@ -71,18 +78,37 @@ final GoRouter appRouter = GoRouter(
               if (i == 2) context.goNamed(SmartPlannerScreen.name);
               if (i == 3) context.goNamed(ProfileScreen.name);
             },
-            destinations: const [
-              NavigationDestination(icon: Icon(Icons.event), label: 'Events'),
+            destinations: [
               NavigationDestination(
-                icon: Icon(Icons.calendar_month),
+                icon: Icon(
+                  Icons.event_outlined,
+                  color: index == 0 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                ),
+                selectedIcon: Icon(Icons.event, color: AppColors.orange),
+                label: 'Events',
+              ),
+              NavigationDestination(
+                icon: Icon(
+                  Icons.calendar_month_outlined,
+                  color: index == 1 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                ),
+                selectedIcon: Icon(Icons.calendar_month, color: AppColors.orange),
                 label: 'Calendar',
               ),
               NavigationDestination(
-                icon: Icon(Icons.lightbulb_outline),
+                icon: Icon(
+                  Icons.lightbulb_outline,
+                  color: index == 2 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                ),
+                selectedIcon: Icon(Icons.lightbulb, color: AppColors.orange),
                 label: 'Smart Planner',
               ),
               NavigationDestination(
-                icon: Icon(Icons.person_outline),
+                icon: Icon(
+                  Icons.person_outline,
+                  color: index == 3 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                ),
+                selectedIcon: Icon(Icons.person, color: AppColors.orange),
                 label: 'Profile',
               ),
             ],
