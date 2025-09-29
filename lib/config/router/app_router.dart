@@ -21,7 +21,7 @@ import 'package:link_up/events/new_events_screen.dart';
 
 import 'package:link_up/payments/payments_screen.dart';
 
-import 'package:link_up/config/theme/app_colors.dart';
+//import 'package:link_up/config/theme/app_colors.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/welcome',
