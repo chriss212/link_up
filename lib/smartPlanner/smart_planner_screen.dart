@@ -150,7 +150,7 @@ In total, the estimated cost is \$170, which is approximately \$21.25 per person
       backgroundColor: surface,
       body: Stack(
         children: [
-          // Optional: subtle background icon/illustration
+
           Positioned(
             top: 60,
             right: -40,

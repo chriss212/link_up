@@ -146,7 +146,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     child: const ListTile(
                       leading: CircleAvatar(
                         radius: 22,
-                        backgroundImage: AssetImage('assets/images/CHRISTIAN.jpeg'),
+                        backgroundImage: AssetImage('assets/images/CHRISTIAN.jpg'),
                       ),
                       title: Text('Christian', style: TextStyle(fontWeight: FontWeight.w600)),
                       subtitle: Text('Available', style: TextStyle(color: Colors.green)),

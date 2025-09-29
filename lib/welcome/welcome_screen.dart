@@ -1,5 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:link_up/config/theme/app_colors.dart';
+import 'package:link_up/shared/widgets/primary_button.dart';
+
 import 'package:link_up/login/login_screen.dart';
 import 'package:link_up/register/register_screen.dart';
 

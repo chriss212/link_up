@@ -19,8 +19,8 @@ class PrimaryButton extends StatelessWidget {
     if (filled) {
       return ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.orange, // Bright orange
-          foregroundColor: AppColors.surface, // Text color
+          backgroundColor: scheme.primary,
+          foregroundColor: scheme.onPrimary,
           shape: const StadiumBorder(),
           minimumSize: const Size.fromHeight(48),
         ),
