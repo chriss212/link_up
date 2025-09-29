@@ -49,46 +49,57 @@ final GoRouter appRouter = GoRouter(
     ),
 
     ShellRoute(
-      builder: (context, state, child) {
-        final path = state.uri.toString();
-        final int index = path.startsWith('/calendar')
-            ? 1
-            : path.startsWith('/chat')
-                ? 2
-                : path.startsWith('/profile')
-                    ? 3
-                    : 0;
+  builder: (context, state, child) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
+    final path = state.uri.toString();
+    final int index = path.startsWith('/calendar')
+        ? 1
+        : path.startsWith('/chat')
+            ? 2
+            : path.startsWith('/profile')
+                ? 3
+                : 0;
 
-        return Scaffold(
-          backgroundColor: AppColors.surface,
-          body: SafeArea(child: child),
-          bottomNavigationBar: NavigationBar(
-            backgroundColor: AppColors.peach,
-            selectedIndex: index,
-            onDestinationSelected: (i) {
-              if (i == 0) context.goNamed(EventFeedScreen.name);
-              if (i == 1) context.goNamed(CalendarScreen.name);
-              if (i == 2) context.goNamed(ChatScreen.name);
-              if (i == 3) context.goNamed(ProfileScreen.name);
-            },
-            destinations: const [
-              NavigationDestination(icon: Icon(Icons.event), label: 'Events'),
-              NavigationDestination(
-                icon: Icon(Icons.calendar_month),
-                label: 'Calendar',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.chat_bubble_outline),
-                label: 'Chat',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.person_outline),
-                label: 'Profile',
-              ),
-            ],
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor, // 👈 Adaptativo
+      body: SafeArea(child: child),
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: colorScheme.surface, // 👈 Cambiado
+        indicatorColor: colorScheme.primaryContainer, // 👈 Agregado
+        selectedIndex: index,
+        onDestinationSelected: (i) {
+          if (i == 0) context.goNamed(EventFeedScreen.name);
+          if (i == 1) context.goNamed(CalendarScreen.name);
+          if (i == 2) context.goNamed(ChatScreen.name);
+          if (i == 3) context.goNamed(ProfileScreen.name);
+        },
+        destinations: [
+          NavigationDestination(
+            icon: const Icon(Icons.event_outlined), // 👈 Outlined para no seleccionado
+            selectedIcon: const Icon(Icons.event), // 👈 Filled para seleccionado
+            label: 'Events',
           ),
-        );
-      },
+          NavigationDestination(
+            icon: const Icon(Icons.calendar_month_outlined),
+            selectedIcon: const Icon(Icons.calendar_month),
+            label: 'Calendar',
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.chat_bubble_outline),
+            selectedIcon: const Icon(Icons.chat_bubble),
+            label: 'Chat',
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.person_outline),
+            selectedIcon: const Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  },
       routes: [
         GoRoute(
           path: '/feed',

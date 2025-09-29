@@ -22,7 +22,6 @@ final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeModeType>(
   (ref) => ThemeNotifier(),
 );
 
-/// Helper opcional si quieres obtener ThemeData directamente
 ThemeData getThemeFromMode(ThemeModeType mode) {
   switch (mode) {
     case ThemeModeType.dark:
