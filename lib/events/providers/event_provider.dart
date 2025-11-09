@@ -28,34 +28,18 @@ class EventState {
 class EventNotifier extends Notifier<EventState> {
   @override
   EventState build() {
-    // Estado inicial (lo que antes pasabas en super(EventState(...)))
-    return const EventState(
-      itinerary: [
-        {
-          "title": "Motocross",
-          "time": "10:00 AM - 1:00 PM",
-          "description": "Ride at the beach dunes with the group",
-        },
-        {
-          "title": "Dinner",
-          "time": "7:00 PM - 9:00 PM",
-          "description": "Seafood dinner at local restaurant",
-        },
-      ],
-      expenses: [
-        {"title": "Hotel", "amount": 200},
-        {"title": "Motocross rental", "amount": 150},
-      ],
-      notes: [
-        "Bring sunscreen and water.",
-        "Book return flight before Friday.",
-      ],
-    );
+    //  AHORA: estado inicial vacío
+    return const EventState();
+    // si querés explícito:
+    // return const EventState(itinerary: [], expenses: [], notes: []);
   }
 
-  // ===== mismos métodos que tenías =====
   void addItinerary(String title, String time, String description) {
-    final newItem = {"title": title, "time": time, "description": description};
+    final newItem = {
+      "title": title,
+      "time": time,
+      "description": description,
+    };
     state = state.copyWith(itinerary: [...state.itinerary, newItem]);
   }
 
@@ -84,7 +68,8 @@ class EventNotifier extends Notifier<EventState> {
   }
 
   void reset() {
-    state = const EventState(itinerary: [], expenses: [], notes: []);
+    state = const EventState();
+    // o: state = const EventState(itinerary: [], expenses: [], notes: []);
   }
 }
 
