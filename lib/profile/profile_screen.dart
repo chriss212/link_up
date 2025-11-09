@@ -44,10 +44,7 @@ class ProfileScreen extends ConsumerWidget {
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: colorScheme.primary,
-                      width: 3,
-                    ),
+                    border: Border.all(color: colorScheme.primary, width: 3),
                     boxShadow: [
                       BoxShadow(
                         color: colorScheme.primary.withOpacity(0.3),
@@ -59,7 +56,9 @@ class ProfileScreen extends ConsumerWidget {
                   child: CircleAvatar(
                     radius: 50,
                     backgroundColor: colorScheme.surface,
-                    backgroundImage: const AssetImage('assets/images/foto_cristi.jpg'),
+                    backgroundImage: const AssetImage(
+                      'assets/images/foto_cristi.jpg',
+                    ),
                     onBackgroundImageError: (_, __) {},
                   ),
                 ),
@@ -183,13 +182,18 @@ class ProfileScreen extends ConsumerWidget {
                 colorScheme,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     child: Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: colorScheme.primaryContainer.withOpacity(0.3),
+                            color: colorScheme.primaryContainer.withOpacity(
+                              0.3,
+                            ),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -213,11 +217,15 @@ class ProfileScreen extends ConsumerWidget {
                         Switch(
                           value: themeMode == ThemeModeType.dark,
                           onChanged: (value) {
-                            ref.read(themeProvider.notifier).setTheme(
-                                  value ? ThemeModeType.dark : ThemeModeType.light,
+                            ref
+                                .read(themeProvider.notifier)
+                                .setTheme(
+                                  value
+                                      ? ThemeModeType.dark
+                                      : ThemeModeType.light,
                                 );
                           },
-                          activeColor: colorScheme.primary,
+                          activeThumbColor: colorScheme.primary,
                         ),
                       ],
                     ),
@@ -278,13 +286,9 @@ class ProfileScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: theme.inputDecorationTheme.fillColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: colorScheme.onSurface.withOpacity(0.08),
-        ),
+        border: Border.all(color: colorScheme.onSurface.withOpacity(0.08)),
       ),
-      child: Column(
-        children: children,
-      ),
+      child: Column(children: children),
     );
   }
 
@@ -355,10 +359,7 @@ class ProfileScreen extends ConsumerWidget {
       context: context,
       builder: (dctx) => AlertDialog(
         backgroundColor: theme.inputDecorationTheme.fillColor,
-        title: Text(
-          "Log Out",
-          style: TextStyle(color: colorScheme.onSurface),
-        ),
+        title: Text("Log Out", style: TextStyle(color: colorScheme.onSurface)),
         content: Text(
           "Are you sure you want to log out?",
           style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
@@ -376,9 +377,7 @@ class ProfileScreen extends ConsumerWidget {
               Navigator.of(dctx).pop();
               context.go('/welcome');
             },
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.red.shade400,
-            ),
+            style: FilledButton.styleFrom(backgroundColor: Colors.red.shade400),
             child: const Text("Log Out"),
           ),
         ],

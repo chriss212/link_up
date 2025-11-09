@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:link_up/config/theme/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;

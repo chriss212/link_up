@@ -117,7 +117,7 @@ class _NewEventScreenState extends State<NewEventScreen> {
             border: Border.all(color: scheme.outline.withOpacity(0.3)),
           ),
           child: DropdownButtonFormField<String>(
-            value: selectedCategory,
+            initialValue: selectedCategory,
             decoration: InputDecoration(
               hintText: "Select event type",
               prefixIcon: Icon(
