@@ -3,24 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:link_up/events/providers/event_provider.dart';
 import 'package:link_up/feed/event_feed_screen.dart';
+import 'package:link_up/events/models/event.dart';
 
 class EventDetailsScreen extends ConsumerWidget {
   static const name = 'event-details';
 
-  final String title;
-  final String date;
-  final String location;
+  final Event event; // 👈 modelo del backend
 
   const EventDetailsScreen({
     super.key,
-    required this.title,
-    required this.date,
-    required this.location,
+    required this.event,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final event = ref.watch(eventProvider);
+    // 👇 ESTE es el estado del itinerary/expenses/notes
+    final eventState = ref.watch(eventProvider);
+
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -64,7 +63,7 @@ class EventDetailsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    event.title, // 👈 antes 'title'
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: colorScheme.onSurface,
@@ -80,7 +79,9 @@ class EventDetailsScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        date,
+                        event.formattedDate, // 👈 usa getter del modelo
+                        // si no lo tienes aún, puedes usar:
+                        // event.date.toLocal().toString().split(' ')[0],
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: colorScheme.onSurface.withOpacity(0.7),
                         ),
@@ -97,7 +98,7 @@ class EventDetailsScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        location,
+                        'Capacity: ${event.capacity} • Enrolled: ${event.enrolled ?? 0}',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: colorScheme.onSurface.withOpacity(0.7),
                         ),
@@ -117,7 +118,7 @@ class EventDetailsScreen extends ConsumerWidget {
               colorScheme: colorScheme,
               title: "Itinerary",
               icon: Icons.schedule_outlined,
-              items: event.itinerary,
+              items: eventState.itinerary, // 👈 viene del provider
               itemBuilder: (item, index) => _buildItineraryItem(
                 context,
                 theme,
@@ -138,7 +139,7 @@ class EventDetailsScreen extends ConsumerWidget {
               colorScheme: colorScheme,
               title: "Expenses",
               icon: Icons.attach_money_outlined,
-              items: event.expenses,
+              items: eventState.expenses,
               itemBuilder: (item, index) => _buildExpenseItem(
                 context,
                 theme,
@@ -159,7 +160,7 @@ class EventDetailsScreen extends ConsumerWidget {
               colorScheme: colorScheme,
               title: "Shared Notes & Docs",
               icon: Icons.note_outlined,
-              items: event.notes.map((n) => {"note": n}).toList(),
+              items: eventState.notes.map((n) => {"note": n}).toList(),
               itemBuilder: (item, index) => _buildNoteItem(
                 context,
                 theme,
@@ -210,7 +211,8 @@ class EventDetailsScreen extends ConsumerWidget {
           children: [
             if (items.isEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                 child: Text(
                   "No items yet",
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -295,7 +297,8 @@ class EventDetailsScreen extends ConsumerWidget {
               color: Colors.red.shade400,
               size: 20,
             ),
-            onPressed: () => ref.read(eventProvider.notifier).removeItinerary(index),
+            onPressed: () =>
+                ref.read(eventProvider.notifier).removeItinerary(index),
           ),
         ],
       ),
@@ -345,7 +348,8 @@ class EventDetailsScreen extends ConsumerWidget {
               color: Colors.red.shade400,
               size: 20,
             ),
-            onPressed: () => ref.read(eventProvider.notifier).removeExpense(index),
+            onPressed: () =>
+                ref.read(eventProvider.notifier).removeExpense(index),
           ),
         ],
       ),
@@ -386,7 +390,8 @@ class EventDetailsScreen extends ConsumerWidget {
               color: Colors.red.shade400,
               size: 20,
             ),
-            onPressed: () => ref.read(eventProvider.notifier).removeNote(index),
+            onPressed: () =>
+                ref.read(eventProvider.notifier).removeNote(index),
           ),
         ],
       ),
@@ -416,7 +421,8 @@ class EventDetailsScreen extends ConsumerWidget {
               style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: "Activity",
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withOpacity(0.6)),
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -426,7 +432,8 @@ class EventDetailsScreen extends ConsumerWidget {
               style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: "Time",
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withOpacity(0.6)),
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -436,7 +443,8 @@ class EventDetailsScreen extends ConsumerWidget {
               style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: "Description",
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withOpacity(0.6)),
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -449,7 +457,8 @@ class EventDetailsScreen extends ConsumerWidget {
           ),
           FilledButton(
             onPressed: () {
-              if (activityCtrl.text.isNotEmpty && timeCtrl.text.isNotEmpty) {
+              if (activityCtrl.text.isNotEmpty &&
+                  timeCtrl.text.isNotEmpty) {
                 ref.read(eventProvider.notifier).addItinerary(
                       activityCtrl.text.trim(),
                       timeCtrl.text.trim(),
@@ -487,7 +496,8 @@ class EventDetailsScreen extends ConsumerWidget {
               style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: "Title",
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withOpacity(0.6)),
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -498,7 +508,8 @@ class EventDetailsScreen extends ConsumerWidget {
               style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: "Amount",
-                labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withOpacity(0.6)),
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -512,7 +523,8 @@ class EventDetailsScreen extends ConsumerWidget {
           FilledButton(
             onPressed: () {
               if (titleCtrl.text.isNotEmpty) {
-                final amount = int.tryParse(amountCtrl.text.trim()) ?? 0;
+                final amount =
+                    int.tryParse(amountCtrl.text.trim()) ?? 0;
                 ref.read(eventProvider.notifier).addExpense(
                       titleCtrl.text.trim(),
                       amount,
@@ -546,7 +558,8 @@ class EventDetailsScreen extends ConsumerWidget {
           style: TextStyle(color: colorScheme.onSurface),
           decoration: InputDecoration(
             labelText: "Note",
-            labelStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+            labelStyle: TextStyle(
+                color: colorScheme.onSurface.withOpacity(0.6)),
             border: const OutlineInputBorder(),
           ),
         ),
@@ -558,7 +571,9 @@ class EventDetailsScreen extends ConsumerWidget {
           FilledButton(
             onPressed: () {
               if (noteCtrl.text.isNotEmpty) {
-                ref.read(eventProvider.notifier).addNote(noteCtrl.text.trim());
+                ref
+                    .read(eventProvider.notifier)
+                    .addNote(noteCtrl.text.trim());
               }
               Navigator.of(dctx).pop();
             },

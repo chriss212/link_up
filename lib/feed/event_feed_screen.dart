@@ -1,59 +1,25 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:link_up/events/new_events_screen.dart';
 import 'package:link_up/events/events_details_screen.dart';
+import 'package:link_up/events/new_events_screen.dart';
+import 'package:link_up/events/models/event.dart';
+import 'package:link_up/events/providers/events_feed_provider.dart';
+// Para imágenes con cache
+import 'package:cached_network_image/cached_network_image.dart';
 
-class EventFeedScreen extends StatefulWidget {
+class EventFeedScreen extends ConsumerWidget {
   static const name = 'feed';
+
   const EventFeedScreen({super.key});
 
   @override
-  State<EventFeedScreen> createState() => _EventFeedScreenState();
-}
-
-// ===== Modelo + datos quemados =====
-class _EventItem {
-  final String title;
-  final String fecha;
-  final String diasFaltantes;
-  final String fotoEvento;
-
-  const _EventItem({
-    required this.title,
-    required this.fecha,
-    required this.diasFaltantes,
-    required this.fotoEvento,
-  });
-}
-
-class _EventFeedScreenState extends State<EventFeedScreen> {
-  final List<_EventItem> _events = const [
-    _EventItem(
-      title: 'ROATAN 2026',
-      fecha: 'Saturday, July 20',
-      diasFaltantes: 'In 3 days',
-      fotoEvento: 'assets/images/roatan1.jpeg',
-    ),
-    _EventItem(
-      title: 'Fiesta Camila',
-      fecha: 'Saturday, Aug 3',
-      diasFaltantes: 'In 2 weeks',
-      fotoEvento: 'assets/images/fiesta.jpeg',
-    ),
-    _EventItem(
-      title: 'Hiking',
-      fecha: 'Saturday, Aug 10',
-      diasFaltantes: 'In 3 weeks',
-      fotoEvento: 'assets/images/salidita.jpg',
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    // Leer el AsyncValue<List<Event>>
+    final eventsAsync = ref.watch(eventsFeedProvider);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -86,11 +52,32 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
         ],
       ),
       body: SafeArea(
-        child: ListView.separated(
-          padding: const EdgeInsets.all(20),
-          itemCount: _events.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemBuilder: (context, index) => _EventCard(item: _events[index]),
+        child: eventsAsync.when(
+          loading: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          error: (err, stack) => Center(
+            child: Text(
+              'Error loading events\n$err',
+              textAlign: TextAlign.center,
+            ),
+          ),
+          data: (events) {
+            if (events.isEmpty) {
+              return const Center(
+                child: Text('No events found'),
+              );
+            }
+
+            return ListView.separated(
+              padding: const EdgeInsets.all(20),
+              itemCount: events.length,
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: 16),
+              itemBuilder: (context, index) =>
+                  _EventCard(event: events[index]),
+            );
+          },
         ),
       ),
       floatingActionButton: SizedBox(
@@ -108,10 +95,10 @@ class _EventFeedScreenState extends State<EventFeedScreen> {
   }
 }
 
-// ===== Tarjeta de evento =====
 class _EventCard extends StatelessWidget {
-  final _EventItem item;
-  const _EventCard({required this.item});
+  final Event event;
+
+  const _EventCard({required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -136,49 +123,56 @@ class _EventCard extends StatelessWidget {
           context.goNamed(
             EventDetailsScreen.name,
             pathParameters: {
-              'title': item.title,
-              'date': item.fecha,
-              'location': 'TBD',
+              'id': event.id.toString(),
             },
+            extra: event, // si quieres mandar todo el objeto
           );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Imagen desde red con cache
             ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: Image.asset(
-                item.fotoEvento,
+              child: CachedNetworkImage(
+                imageUrl: event.displayImageUrl,
                 width: double.infinity,
                 height: 180,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: double.infinity,
-                    height: 180,
-                    color: colorScheme.surfaceVariant.withOpacity(0.3),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.image_outlined,
-                          size: 48,
-                          color: colorScheme.onSurface.withOpacity(0.4),
+                placeholder: (context, url) => Container(
+                  width: double.infinity,
+                  height: 180,
+                  color: colorScheme.surfaceVariant.withOpacity(0.3),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  width: double.infinity,
+                  height: 180,
+                  color: colorScheme.surfaceVariant.withOpacity(0.3),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_outlined,
+                        size: 48,
+                        color: colorScheme.onSurface.withOpacity(0.4),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Image not found',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color:
+                              colorScheme.onSurface.withOpacity(0.5),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Image not found',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurface.withOpacity(0.5),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
             Padding(
@@ -187,7 +181,7 @@ class _EventCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.title,
+                    event.title,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -202,7 +196,7 @@ class _EventCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        item.fecha,
+                        event.formattedDate,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -211,7 +205,7 @@ class _EventCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    item.diasFaltantes,
+                    event.daysLeftLabel,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -220,7 +214,7 @@ class _EventCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Avatares de ejemplo
+                      // Avatares de ejemplo, los dejo igual
                       Stack(
                         clipBehavior: Clip.none,
                         children: [
@@ -245,7 +239,8 @@ class _EventCard extends StatelessWidget {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: colorScheme.surfaceVariant.withOpacity(0.3),
+                          color:
+                              colorScheme.surfaceVariant.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
