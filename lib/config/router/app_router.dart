@@ -10,6 +10,8 @@ import 'package:link_up/register/register_screen.dart';
 
 import 'package:link_up/feed/event_feed_screen.dart';
 import 'package:link_up/calendar/calendar_screen.dart';
+import 'package:link_up/events/models/event.dart';
+
 
 import 'package:link_up/profile/profile_screen.dart';
 import 'package:link_up/profile/edit_personal_info_screen.dart';
@@ -165,18 +167,13 @@ final GoRouter appRouter = GoRouter(
         ),
 
         GoRoute(
-          path: '/event-details/:title/:date/:location',
+          path: '/event-details/:id',
           name: EventDetailsScreen.name,
           builder: (context, state) {
-            final title = state.pathParameters['title'] ?? 'Event';
-            final date = state.pathParameters['date'] ?? 'Unknown date';
-            final location =
-                state.pathParameters['location'] ?? 'Unknown location';
+            final event = state.extra as Event;
 
             return EventDetailsScreen(
-              title: title,
-              date: date,
-              location: location,
+              event: event,
             );
           },
         ),

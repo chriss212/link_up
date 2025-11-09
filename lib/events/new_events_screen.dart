@@ -1,26 +1,135 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:link_up/events/models/event.dart';
+import 'package:link_up/events/services/event_api_service.dart';
+import 'package:link_up/events/providers/events_feed_provider.dart';
 import 'package:link_up/feed/event_feed_screen.dart';
 
-class NewEventScreen extends StatefulWidget {
+class NewEventScreen extends ConsumerStatefulWidget {
   const NewEventScreen({super.key});
 
   static const String name = 'new-event';
 
   @override
-  State<NewEventScreen> createState() => _NewEventScreenState();
+  ConsumerState<NewEventScreen> createState() => _NewEventScreenState();
 }
 
-class _NewEventScreenState extends State<NewEventScreen> {
+class _NewEventScreenState extends ConsumerState<NewEventScreen> {
   String? selectedCategory;
   bool isCreating = false;
 
+  // Controllers
+  final _nameCtrl = TextEditingController();
+  final _locationCtrl = TextEditingController();
+  final _descriptionCtrl = TextEditingController();
+  final _dateCtrl = TextEditingController();
+  final _timeCtrl = TextEditingController();
+  final _capacityCtrl = TextEditingController();
+  final _imageUrlCtrl = TextEditingController();
+
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _locationCtrl.dispose();
+    _descriptionCtrl.dispose();
+    _dateCtrl.dispose();
+    _timeCtrl.dispose();
+    _capacityCtrl.dispose();
+    _imageUrlCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      firstDate: now,
+      lastDate: DateTime(now.year + 2),
+      initialDate: _selectedDate ?? now.add(const Duration(days: 1)),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _dateCtrl.text = '${picked.month}/${picked.day}/${picked.year}';
+      });
+    }
+  }
+
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? const TimeOfDay(hour: 19, minute: 0),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedTime = picked;
+        final hour = picked.hourOfPeriod == 0 ? 12 : picked.hourOfPeriod;
+        final period = picked.period == DayPeriod.am ? 'AM' : 'PM';
+        _timeCtrl.text =
+            '$hour:${picked.minute.toString().padLeft(2, '0')} $period';
+      });
+    }
+  }
+
   Future<void> _createEvent() async {
+    final theme = Theme.of(context);
+
+    if (_nameCtrl.text.trim().isEmpty ||
+        _selectedDate == null ||
+        _selectedTime == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please fill in at least name, date and time'),
+          backgroundColor: theme.colorScheme.error,
+        ),
+      );
+      return;
+    }
+
+    // Combinar fecha y hora
+    final start = DateTime(
+      _selectedDate!.year,
+      _selectedDate!.month,
+      _selectedDate!.day,
+      _selectedTime!.hour,
+      _selectedTime!.minute,
+    );
+    final end = start.add(const Duration(hours: 2));
+
+    final capacity = int.tryParse(_capacityCtrl.text.trim()) ?? 10;
+
     setState(() => isCreating = true);
 
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final newEvent = Event(
+        id: 0,
+        title: _nameCtrl.text.trim(),
+        description: _descriptionCtrl.text.trim().isEmpty
+            ? null
+            : _descriptionCtrl.text.trim(),
+        imageUrl: _imageUrlCtrl.text.trim().isEmpty
+            ? null
+            : _imageUrlCtrl.text.trim(),
+        startAt: start,
+        endAt: end,
+        capacity: capacity,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
 
-    if (mounted) {
+      final api = ref.read(eventApiServiceProvider);
+      await api.createEvent(newEvent);
+      await ref.read(eventsFeedProvider.notifier).refresh();
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Row(
@@ -42,6 +151,18 @@ class _NewEventScreenState extends State<NewEventScreen> {
       if (mounted) {
         context.goNamed(EventFeedScreen.name);
       }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error creating event: $e'),
+          backgroundColor: theme.colorScheme.error,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => isCreating = false);
+      }
     }
   }
 
@@ -50,6 +171,10 @@ class _NewEventScreenState extends State<NewEventScreen> {
     String? hint,
     int maxLines = 1,
     IconData? icon,
+    TextEditingController? controller,
+    bool readOnly = false,
+    VoidCallback? onTap,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
@@ -72,7 +197,11 @@ class _NewEventScreenState extends State<NewEventScreen> {
             border: Border.all(color: scheme.outline.withOpacity(0.3)),
           ),
           child: TextField(
+            controller: controller,
             maxLines: maxLines,
+            readOnly: readOnly,
+            onTap: onTap,
+            keyboardType: keyboardType,
             decoration: InputDecoration(
               hintText: hint,
               prefixIcon: icon != null
@@ -174,12 +303,14 @@ class _NewEventScreenState extends State<NewEventScreen> {
                 label: "Event Name",
                 hint: "Beach bonfire, movie night...",
                 icon: Icons.event_outlined,
+                controller: _nameCtrl,
               ),
               const SizedBox(height: 24),
               _buildTextField(
                 label: "Location",
                 hint: "Where will this happen?",
                 icon: Icons.location_on_outlined,
+                controller: _locationCtrl,
               ),
               const SizedBox(height: 24),
               _buildDropdown(),
@@ -191,6 +322,9 @@ class _NewEventScreenState extends State<NewEventScreen> {
                       label: "Date",
                       hint: "MM/DD/YYYY",
                       icon: Icons.calendar_today_outlined,
+                      controller: _dateCtrl,
+                      readOnly: true,
+                      onTap: _pickDate,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -199,9 +333,28 @@ class _NewEventScreenState extends State<NewEventScreen> {
                       label: "Time",
                       hint: "7:00 PM",
                       icon: Icons.access_time_outlined,
+                      controller: _timeCtrl,
+                      readOnly: true,
+                      onTap: _pickTime,
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 24),
+              _buildTextField(
+                label: "Capacity",
+                hint: "How many people?",
+                icon: Icons.group_outlined,
+                controller: _capacityCtrl,
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 24),
+              _buildTextField(
+                label: "Image URL",
+                hint: "https://example.com/image.jpg",
+                icon: Icons.image_outlined,
+                controller: _imageUrlCtrl,
+                keyboardType: TextInputType.url,
               ),
               const SizedBox(height: 24),
               _buildTextField(
@@ -209,6 +362,7 @@ class _NewEventScreenState extends State<NewEventScreen> {
                 hint: "What should people expect?",
                 maxLines: 4,
                 icon: Icons.notes_outlined,
+                controller: _descriptionCtrl,
               ),
               const SizedBox(height: 40),
               SizedBox(
@@ -218,7 +372,8 @@ class _NewEventScreenState extends State<NewEventScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: scheme.primary,
                     foregroundColor: scheme.onPrimary,
-                    disabledBackgroundColor: scheme.onSurface.withOpacity(0.4),
+                    disabledBackgroundColor:
+                        scheme.onSurface.withOpacity(0.4),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
