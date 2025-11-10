@@ -31,7 +31,7 @@ class FinancesNotifier extends Notifier<FinancesState> {
   @override
   FinancesState build() {
     _service = FinancesService();
-    return const FinancesState(); // 👈 limpio, sin _init()
+    return const FinancesState();
   }
 
   Future<void> loadAll() async {
@@ -40,10 +40,6 @@ class FinancesNotifier extends Notifier<FinancesState> {
 
       final reqs = await _service.getRequests();
       final accs = await _service.getAccounts();
-
-      // 👇 confirmación temporal para debug
-      // print('Fetched requests: $reqs');
-      // print('Fetched shared accounts: $accs');
 
       state = state.copyWith(
         requests: List<Map<String, dynamic>>.from(reqs),
@@ -58,7 +54,7 @@ class FinancesNotifier extends Notifier<FinancesState> {
 
   Future<void> addRequest(String title, String from, int amount) async {
     await _service.addRequest(title, from, amount);
-    await loadAll(); // 👈 recarga los datos después del POST
+    await loadAll();
   }
 
   Future<void> markAsPaid(int id) async {
