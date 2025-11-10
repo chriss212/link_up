@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'config/theme/theme_provider.dart'; // ThemeNotifier y ThemeModeType
 import 'config/theme/app_theme.dart';      // AppTheme.lightTheme / darkTheme
 import 'config/router/app_router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env"); 
   runApp(const ProviderScope(child: MyApp()));
 }
 
