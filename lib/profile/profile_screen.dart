@@ -373,7 +373,7 @@ class ProfileScreen extends ConsumerWidget {
             onPressed: () {
               ref.read(walletProvider.notifier).reset();
               ref.read(profileProvider.notifier).reset();
-              ref.read(financesProvider.notifier).reset();
+              ref.invalidate(financesProvider);
               Navigator.of(dctx).pop();
               context.go('/welcome');
             },

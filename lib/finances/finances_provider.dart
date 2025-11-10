@@ -1,75 +1,84 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'finances_service.dart';
 
 class FinancesState {
   final List<Map<String, dynamic>> requests;
   final List<Map<String, dynamic>> sharedAccounts;
+  final bool isLoading;
 
   const FinancesState({
     this.requests = const [],
     this.sharedAccounts = const [],
+    this.isLoading = false,
   });
 
   FinancesState copyWith({
     List<Map<String, dynamic>>? requests,
     List<Map<String, dynamic>>? sharedAccounts,
+    bool? isLoading,
   }) {
     return FinancesState(
       requests: requests ?? this.requests,
       sharedAccounts: sharedAccounts ?? this.sharedAccounts,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
 
 class FinancesNotifier extends Notifier<FinancesState> {
+  late final FinancesService _service;
+
   @override
   FinancesState build() {
-    return const FinancesState(
-      requests: [
-        {"title": "Dinner", "from": "Liam", "amount": 250, "status": "Unpaid"},
-        {"title": "Hotel", "from": "Olivia", "amount": 1000, "status": "Paid"},
-      ],
-      sharedAccounts: [
-        {"name": "Transportation", "members": 4, "expected": 500, "contributed": 0},
-        {"name": "Activities", "members": 4, "expected": 750, "contributed": 0},
-      ],
-    );
+    _service = FinancesService();
+    return const FinancesState(); // 👈 limpio, sin _init()
   }
 
-  void addRequest(String title, String from, int amount) {
-    final newRequest = {"title": title, "from": from, "amount": amount, "status": "Unpaid"};
-    state = state.copyWith(requests: [...state.requests, newRequest]);
+  Future<void> loadAll() async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final reqs = await _service.getRequests();
+      final accs = await _service.getAccounts();
+
+      // 👇 confirmación temporal para debug
+      // print('Fetched requests: $reqs');
+      // print('Fetched shared accounts: $accs');
+
+      state = state.copyWith(
+        requests: List<Map<String, dynamic>>.from(reqs),
+        sharedAccounts: List<Map<String, dynamic>>.from(accs),
+        isLoading: false,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false);
+      rethrow;
+    }
   }
 
-  void markAsPaid(int index) {
-    final updated = [...state.requests];
-    updated[index] = {...updated[index], "status": "Paid"};
-    state = state.copyWith(requests: updated);
+  Future<void> addRequest(String title, String from, int amount) async {
+    await _service.addRequest(title, from, amount);
+    await loadAll(); // 👈 recarga los datos después del POST
   }
 
-  void addSharedAccount({
+  Future<void> markAsPaid(int id) async {
+    await _service.markAsPaid(id);
+    await loadAll();
+  }
+
+  Future<void> addSharedAccount({
     required String name,
     required int members,
     required int expected,
     int contributed = 0,
-  }) {
-    final newAccount = {
-      "name": name,
-      "members": members,
-      "expected": expected,
-      "contributed": contributed,
-    };
-    state = state.copyWith(sharedAccounts: [...state.sharedAccounts, newAccount]);
+  }) async {
+    await _service.addAccount(name, members, expected, contributed);
+    await loadAll();
   }
 
-  void addContribution(int index, int amount) {
-    final updated = [...state.sharedAccounts];
-    final current = updated[index];
-    updated[index] = {...current, "contributed": (current["contributed"] as int) + amount};
-    state = state.copyWith(sharedAccounts: updated);
-  }
-
-  void reset() {
-    state = const FinancesState(requests: [], sharedAccounts: []);
+  Future<void> addContribution(int id, int amount) async {
+    await _service.addContribution(id, amount);
+    await loadAll();
   }
 }
 
