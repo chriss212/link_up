@@ -53,10 +53,10 @@ final GoRouter appRouter = GoRouter(
         final int index = path.startsWith('/calendar')
             ? 1
             : path.startsWith('/smart-planner')
-                ? 2
-                : path.startsWith('/profile')
-                    ? 3
-                    : 0;
+            ? 2
+            : path.startsWith('/profile')
+            ? 3
+            : 0;
 
         // Detectar tema actual
         final theme = Theme.of(context);
@@ -67,7 +67,7 @@ final GoRouter appRouter = GoRouter(
           backgroundColor: theme.scaffoldBackgroundColor,
           body: SafeArea(child: child),
           bottomNavigationBar: NavigationBar(
-            backgroundColor: isDark 
+            backgroundColor: isDark
                 ? colorScheme.surfaceContainer
                 : Colors.white,
             indicatorColor: AppColors.orange.withOpacity(isDark ? 0.25 : 0.15),
@@ -82,7 +82,9 @@ final GoRouter appRouter = GoRouter(
               NavigationDestination(
                 icon: Icon(
                   Icons.event_outlined,
-                  color: index == 0 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                  color: index == 0
+                      ? AppColors.orange
+                      : colorScheme.onSurfaceVariant,
                 ),
                 selectedIcon: Icon(Icons.event, color: AppColors.orange),
                 label: 'Events',
@@ -90,15 +92,22 @@ final GoRouter appRouter = GoRouter(
               NavigationDestination(
                 icon: Icon(
                   Icons.calendar_month_outlined,
-                  color: index == 1 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                  color: index == 1
+                      ? AppColors.orange
+                      : colorScheme.onSurfaceVariant,
                 ),
-                selectedIcon: Icon(Icons.calendar_month, color: AppColors.orange),
+                selectedIcon: Icon(
+                  Icons.calendar_month,
+                  color: AppColors.orange,
+                ),
                 label: 'Calendar',
               ),
               NavigationDestination(
                 icon: Icon(
                   Icons.lightbulb_outline,
-                  color: index == 2 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                  color: index == 2
+                      ? AppColors.orange
+                      : colorScheme.onSurfaceVariant,
                 ),
                 selectedIcon: Icon(Icons.lightbulb, color: AppColors.orange),
                 label: 'Smart Planner',
@@ -106,7 +115,9 @@ final GoRouter appRouter = GoRouter(
               NavigationDestination(
                 icon: Icon(
                   Icons.person_outline,
-                  color: index == 3 ? AppColors.orange : colorScheme.onSurfaceVariant,
+                  color: index == 3
+                      ? AppColors.orange
+                      : colorScheme.onSurfaceVariant,
                 ),
                 selectedIcon: Icon(Icons.person, color: AppColors.orange),
                 label: 'Profile',
