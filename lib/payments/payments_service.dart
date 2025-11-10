@@ -33,7 +33,7 @@ class PaymentsService {
       print('🔹 Payment response: ${response.data}');
       print('🔹 Status code: ${response.statusCode}');
 
-      // 💥 Acepta más casos de éxito (200, 201 y sin 'success' explícito)
+
       if (response.statusCode == 200 ||
           response.statusCode == 201 ||
           response.statusCode == 202) {
