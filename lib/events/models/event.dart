@@ -1,6 +1,6 @@
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart'; //importar la librería intl
 
-class Event {
+class Event {   //tiene todos los campos que el backend necesita
   final int id;
   final String title;
   final String? description;
@@ -12,7 +12,7 @@ class Event {
   final DateTime updatedAt;
   final int? enrolled; // lo agrega findAll en el backend
 
-  Event({
+  Event({  //permite crear un objeto Event fácilmente, asegurando que los campos importantes sean obligatorios
     required this.id,
     required this.title,
     this.description,
@@ -52,12 +52,12 @@ class Event {
     };
   }
 
-  String get formattedDate {
+  String get formattedDate { // Esto formatea las fechas en un texto legible, como:
     final formatter = DateFormat('EEE, MMM d • h:mm a');
     return '${formatter.format(startAt)} - ${formatter.format(endAt)}';
   }
 
-  String get daysLeftLabel {
+  String get daysLeftLabel { // Calcula cuántos días faltan para que empiece el evento y devuelve un texto listo para mostrar:
     final diff = startAt.difference(DateTime.now()).inDays;
     if (diff < 0) return 'Finished';
     if (diff == 0) return 'Today';

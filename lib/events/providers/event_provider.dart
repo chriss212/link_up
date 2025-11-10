@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EventState {
+class EventState { //Cada campo es una lista que guarda información de una parte del evento:
   final List<Map<String, dynamic>> itinerary;
   final List<Map<String, dynamic>> expenses;
   final List<String> notes;
@@ -24,14 +24,13 @@ class EventState {
   }
 }
 
-/// Riverpod 3.x — Notifier API
-class EventNotifier extends Notifier<EventState> {
+/// 
+class EventNotifier extends Notifier<EventState> { //Contiene los métodos que modifican el estado y se comunican con la UI.
   @override
   EventState build() {
     //  AHORA: estado inicial vacío
     return const EventState();
-    // si querés explícito:
-    // return const EventState(itinerary: [], expenses: [], notes: []);
+    
   }
 
   void addItinerary(String title, String time, String description) {
@@ -69,10 +68,10 @@ class EventNotifier extends Notifier<EventState> {
 
   void reset() {
     state = const EventState();
-    // o: state = const EventState(itinerary: [], expenses: [], notes: []);
+    
   }
 }
 
-/// Provider (v3)
+/// Provider “Voy a crear un Notifier llamado EventNotifier que maneja un estado de tipo EventState”.
 final eventProvider =
     NotifierProvider<EventNotifier, EventState>(EventNotifier.new);

@@ -54,22 +54,22 @@ class EventFeedScreen extends ConsumerWidget {
       body: SafeArea(
         child: eventsAsync.when(
           loading: () => const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(), //Cuando está cargando, muestra un spinner.
           ),
           error: (err, stack) => Center(
             child: Text(
-              'Error loading events\n$err',
+              'Error loading events\n$err', //Si hay error, muestra el mensaje de error
               textAlign: TextAlign.center,
             ),
           ),
           data: (events) {
             if (events.isEmpty) {
               return const Center(
-                child: Text('No events found'),
+                child: Text('No events found'), //lo que sale cuando no hay eventos
               );
             }
 
-            return ListView.separated(
+            return ListView.separated( // Cuando llegan los datos, construye una lista de tarjetas (_EventCard) para cada evento.
               padding: const EdgeInsets.all(20),
               itemCount: events.length,
               separatorBuilder: (context, index) =>
@@ -95,7 +95,7 @@ class EventFeedScreen extends ConsumerWidget {
   }
 }
 
-class _EventCard extends StatelessWidget {
+class _EventCard extends StatelessWidget { //Esta clase construye cada tarjeta individual del feed (un evento con imagen, título, fecha, etc.):
   final Event event;
 
   const _EventCard({required this.event});
@@ -137,7 +137,7 @@ class _EventCard extends StatelessWidget {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: CachedNetworkImage(
+              child: CachedNetworkImage( //Usa CachedNetworkImage para descargar y guardar en cache la imagen del evento.
                 imageUrl: event.displayImageUrl,
                 width: double.infinity,
                 height: 180,
